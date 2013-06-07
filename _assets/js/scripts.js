@@ -10,7 +10,102 @@ var $otc_type = getParameter('otc');
 var $enable_more, $user_level, $access_genes;
 
 $(document).ready(function () {
-	
+
+	$iframe = $("iframe");
+
+	iframePhone = setupIframeListenerFor($iframe[0]);
+	iframePhone2 = setupIframeListenerFor($iframe[1]);
+
+	function setupIframeListenerFor(iframe, callback) {
+	    var iframeOrigin = iframe.src.match(/(.*?\/\/.*?)\//)[1],
+	        selfOrigin = window.location.href.match(/(.*?\/\/.*?)\//)[1],
+	        iframePhone = {},
+	        postMessageQueue = [],
+	        post = function (message) {
+	            if (iframePhone.connected) {
+	                // if we are laready connected ... send the message
+	                message.origin = selfOrigin;
+	                // See http://dev.opera.com/articles/view/window-postmessage-messagechannel/#crossdoc
+	                //     https://github.com/Modernizr/Modernizr/issues/388
+	                //     http://jsfiddle.net/ryanseddon/uZTgD/2/
+	                    iframe.contentWindow.postMessage(message, iframeOrigin);
+	            } else {
+	                // else queue up the messages to send after connection complete.
+	                postMessageQueue.push(message);
+	            }
+	        };
+
+	    iframePhone.connected = false;
+	    iframePhone.handlers = {};
+
+	    iframePhone.addListener = function (messageName, func) {
+	        iframePhone.handlers[messageName] = func;
+	    };
+
+	    iframePhone.removeListener = function (messageName) {
+	        iframePhone.handlers[messageName] = null;
+	    };
+
+	    iframePhone.addDispatchListener = function (eventName, func, properties) {
+	        iframePhone.addListener(eventName, func);
+	        iframePhone.post({
+	            'type': 'listenForDispatchEvent',
+	                'eventName': eventName,
+	                'properties': properties
+	        });
+	    };
+
+	    iframePhone.removeDispatchListener = function (messageName) {
+	        iframePhone.post({
+	            'type': 'removeListenerForDispatchEvent',
+	                'eventName': messageName
+	        });
+	        iframePhone.removeListener(messageName);
+	    };
+
+	    // when we receive 'hello':
+	    iframePhone.addListener('hello', function () {
+	        // push the first couple of mnessages into the beginning
+	        // of the postMessageQueue stack.
+	            postMessageQueue.unshift({
+	                type: 'setFocus'
+	            });
+	        // this will be the first message sent in response to the 'hello'
+	        // from the embedded application.
+	        postMessageQueue.unshift({
+	            type: 'hello'
+	        });
+	        iframePhone.connected = true;
+	        // Now send any messages that have been queued up ...
+	        while (message = postMessageQueue.shift()) {
+	            iframePhone.post(message);
+	        }
+	        if (callback && typeof callback === "function") {
+	            callback();
+	        }
+	    });
+
+	    var receiveMessage = function (message) {
+	        var messageData;
+
+	        if (message.source === iframe.contentWindow && message.origin === iframeOrigin) {
+	            messageData = message.data;
+	            if (typeof messageData === 'string') {
+	                messageData = JSON.parse(messageData);
+	            }
+	            if (iframePhone.handlers[messageData.type]) {
+	                iframePhone.handlers[messageData.type](messageData.values);
+	            } else {
+	                console.log("cant handle type: " + messageData.type);
+	            }
+	        }
+	    };
+
+	    window.addEventListener('message', receiveMessage, false);
+	    iframePhone.post = post;
+	    return iframePhone;
+	}
+
 	// get user level from URI
 	$user_level = getParameter('ul');
 	$access_genes = checkAccessLevel($user_level);
@@ -54,9 +149,9 @@ $(document).ready(function () {
  *
  */
 function changeGene($gene) {
-	
+
 	var $scroll_to_gene = true;
-	
+
 	// get gene name from the menu id
 	if ($gene == '' || $gene == undefined) {
 	  $('select').each(function(i){
@@ -65,7 +160,7 @@ function changeGene($gene) {
 		  }
 	  });
 	}
-	
+
 	// make sure they have access to this particular gene
 	var $access = -1;
 	for (var $i = 0; $i < $access_genes.length; $i++) {
@@ -76,13 +171,13 @@ function changeGene($gene) {
 	}
 
 	if ($access == 1) {
-		
+
 		if ($('#' + $gene + '-menu option:selected').val().indexOf('compare') !== -1) {
 		  $('#' + $gene + '-dna div.first em').css({'background-color': '#ff0000 !important'});
 		} else {
 		  $('#' + $gene + '-dna div.first em').css({'background-color': 'transparent'});
 		}
-		
+
 		if ($('#' + $gene + '-menu option:selected').val().indexOf('sequence') !== -1) {
 		  window.location = 'sequence.html?ul=' + $user_level + '&gene=' + $gene;
 		  $scroll_to_gene = false;
@@ -90,11 +185,15 @@ function changeGene($gene) {
 	}
 
 	// hide applet if visible
-	$('#details applet').css('left', '-999em');
-	
+	$('#details iframe').css('left', '-999em');
+	iframePhone.post({ type:'set',  propertyName: 'snapState', propertyValue: 'intro-cells'});
+	iframePhone2.post({ type:'set',  propertyName: 'snapState', propertyValue: 'intro-cells'});
+	iframePhone.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
+	iframePhone2.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
+
 	// hide video links if visible
 	$('#video-links').fadeOut();
-	
+
 	// update more button
 	$('#more').removeAttr("disabled");
 	$('#more').unbind('click');
@@ -105,9 +204,9 @@ function changeGene($gene) {
 	// update reset button
 	$('#reset').unbind('click');
 	$('#reset').click(function(){
-		resetDNA($gene);						   
+		resetDNA($gene);
 	});
-	
+
 	// move dna section to appropriate gene and prepare to update genie with dna sequence
 	var $chromosome_top, $dna_top, $allele_desc;
 	if ($gene == 'tail') {
@@ -173,10 +272,10 @@ function changeGene($gene) {
 	}
 
 	if ($scroll_to_gene) {
-	
+
 		// move magnifier to the desired position
 		scrollViewport($chromosome_top, $dna_top);
-		
+
 		// change background image of applet containers
 		$('.header').text('');
 		if ($access == 1) {
@@ -205,8 +304,8 @@ function scrollViewport($chromosome_top, $dna_top) {
 	$('#dna').animate({
 		'top': $dna_top
 		}, 1000, function(){
-			$('#magnifier').css('background-position', '0 0');	
-		});	
+			$('#magnifier').css('background-position', '0 0');
+		});
 }
 
 /*
@@ -249,7 +348,7 @@ function sendDNAStrand($applet_id, $dna_strand, $dna_string, $dna_div) {
 	// remove dashes
 	var regex = new RegExp('_', 'g');
 	$dna_strand = $dna_strand.replace(regex, '');
-	
+
 	// make sure to scroll to correct gene
 	var $gene_line_id = $dna_div.replace('-dna', '-line');
 	var $gene_line_pos = $($gene_line_id).position().top;
@@ -270,10 +369,17 @@ function sendDNAStrand($applet_id, $dna_strand, $dna_string, $dna_div) {
 	highlightSequence($dna_string, $dna_div);
 
 	// send DNA strand to genie
-	document.getElementById($applet_id).runMwScript($dna_strand);
+	// document.getElementById($applet_id).runMwScript($dna_strand);
+	//document.getElementById($applet_id).runMwScript($dna_strand);
+	phone = $applet_id === "applet2" ? iframePhone2 : iframePhone;
+  phone.post({
+      type:'set',
+      propertyName: 'DNA',
+      propertyValue: $dna_strand
+  });
 
 	// reveal applet
-	var applet_timer = setTimeout('showApplet()', 3000);
+	var applet_timer = setTimeout('showApplet()', 1000);
 
 	// check for stop codons
 	var $stop_codon = stopCodonCheck($dna_string);
@@ -305,7 +411,13 @@ function sendNextDNAStrand($applet_id, $dna_strand) {
 	}
 
 	// send DNA strand to genie
-	document.getElementById($applet_id).runMwScript($dna_strand);
+	phone = $applet_id === "applet2" ? iframePhone2 : iframePhone;
+	phone.post({
+    type:'set',
+    propertyName: 'DNA',
+    propertyValue: $dna_strand
+  });
+  phone.post({ type:'set',  propertyName: 'snapState', propertyValue: 'dna'});
 }
 
 /*
@@ -324,8 +436,10 @@ function enableMore() {
  *
  */
 function showApplet() {
-	$('#details applet').css('left', '-23px');
+	$('#details iframe').css('left', '0px');
 	$('#video-links').fadeIn();
+	iframePhone.post({ type:'set',  propertyName: 'state', propertyValue: 'dna'});
+	iframePhone2.post({ type:'set',  propertyName: 'state', propertyValue: 'dna'});
 }
 
 /*
@@ -357,10 +471,6 @@ function refold(applet_id) {
  */
 function resetDNA($gene) {
 	// reset applets
-	$('#app-container .applet-wrap').html('');
-	$('#app-container .applet-wrap').html('<applet id="applet" archive="mwapplet.jar" code="org.concord.modeler.MwApplet" width="680" height="550" mayscript="true" scroll="no"><param name="script" value="page:0:import P2GGenie.cml" /></applet>');
-	$('#app-container2 .applet-wrap').html('');
-	$('#app-container2 .applet-wrap').html('<applet id="applet2" archive="mwapplet.jar" code="org.concord.modeler.MwApplet" width="680" height="550" mayscript="true" scroll="no"><param name="script" value="page:0:import P2GGenie.cml" /></applet>');
 	$('.header').text('');
 	$('#gene-description').fadeOut();
 	changeGene($gene);
@@ -436,15 +546,15 @@ function sendMore($start_num, $gene) {
 	if ($dna_string.length < 60) {
 		$('#more').attr('disabled', 'disabled');
 	}
-	sendNextDNAStrand('applet', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string);
+	sendNextDNAStrand('applet', $dna_string);
 
 	// highlight string of dna sent
-	$($dna_div + ' div.first span').removeClass('highlighted');
-	$($dna_div + ' div.hidden span').removeClass('highlighted');
-	highlightSequence($orig_dna_string, $dna_div);
+	// $($dna_div + ' div.first span').removeClass('highlighted');
+	// $($dna_div + ' div.hidden span').removeClass('highlighted');
+	// highlightSequence($orig_dna_string, $dna_div);
 
 	if ($selected_option_value.search('compare') > -1) {
-		sendNextDNAStrand('applet2', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string2);
+		sendNextDNAStrand('applet2', $dna_string2);
 	}
 
 }
@@ -465,14 +575,14 @@ function updateDNASection($gene, $inspect) {
 		$selected_option_text = $('#' + $gene + '-menu option:selected').text();
 		$selected_option_value = $('#' + $gene + '-menu option:selected').val();
 	}
-	
+
 	// make sure we have a value to compare in the case this is not a compare request (all alleles need to indicate where they differ from other alleles for the same gene, so we still need to compare single alleles to their sister alleles when showing them)
 	if ($('#' + $gene + '-menu option:selected').index() == 1) {
 		$other_option_value = $('#' + $gene + '-menu option:selected').next().val();
 	} else {
 		$other_option_value = $('#' + $gene + '-menu option:selected').prev().val();
 	}
-	
+
 	// reset all select menus except selected
 	$('select').each(function(i){
 		var n = this.id.search($gene);
@@ -480,7 +590,7 @@ function updateDNASection($gene, $inspect) {
 			$('#' + this.id + ' option:first-child').attr('selected', 'selected');
 		}
 	});
-	
+
 	// image replacement
 	$('#drakes').css('width', '362px');
 	$('#drakes p').css('float', 'left');
@@ -521,7 +631,7 @@ function updateDNASection($gene, $inspect) {
 			$('#drake2').fadeOut();
 			$('#app-container').unbind('click');
 			$('#app-container').click(function(){
-				sendDNAStrand('applet', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string, $highlight, '#' + $gene + '-dna');
+				sendDNAStrand('applet', $dna_string, $highlight, '#' + $gene + '-dna');
 				$('#app-container .header').html($selected_option_text).fadeIn();
 				$('#app-container2 .header').html($selected_option_text).fadeIn();
 			});
@@ -562,35 +672,35 @@ function updateDNASection($gene, $inspect) {
 			$dna_string2 = $dna_string2.substring(0, 60);
 			$('#app-container').unbind('click');
 			$('#app-container').click(function(){
-				sendDNAStrand('applet', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string, $highlight, '#' + $gene + '-dna');
-				sendDNAStrand('applet2', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string2, $highlight, '#' + $gene + '-dna');
+				sendDNAStrand('applet', $dna_string, $highlight, '#' + $gene + '-dna');
+				sendDNAStrand('applet2', $dna_string2, $highlight, '#' + $gene + '-dna');
 				$('#app-container .header').html($selected_option_value_array[0]).fadeIn();
 				$('#app-container2 .header').html($selected_option_value_array[1]).fadeIn();
 			});
 			$('#app-container2').unbind('click');
 			$('#app-container2').click(function(){
-				sendDNAStrand('applet', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string, $highlight, '#' + $gene + '-dna');
-				sendDNAStrand('applet2', 'mw2d:1:stop; select atom all; remove; set DNA ' + $dna_string2, $highlight, '#' + $gene + '-dna');
+				sendDNAStrand('applet', $dna_string, $highlight, '#' + $gene + '-dna');
+				sendDNAStrand('applet2', $dna_string2, $highlight, '#' + $gene + '-dna');
 			});
 		}
 	}
 }
 
-/* 
+/*
  * Compare Alleles
  * Compares two given alleles and marks location of the difference(s)
  */
 function compareAlleleSeqs($gene, $allele1, $allele2) {
 	$return_seqs_array = [];
-	
+
 	// initialize array for keeping track of differences
 	var $diff = [];
-	
+
 	// create arrays of letters from allele sequences
 	var $allele1_array = $seqs[$allele1].split('');
 	if (!($allele2 === '') && !($allele2 === undefined)) {
 		var $allele2_array = $seqs[$allele2].split('');
-	
+
 	// compare first allele to second allele and note location of differences
 	for (var $i = 0; $i < $allele1_array.length; $i++) {
 		if ($allele1_array[$i] !== $allele2_array[$i]) {
@@ -607,7 +717,7 @@ function compareAlleleSeqs($gene, $allele1, $allele2) {
 			$allele2_array[$diff[$j]] = '<em>' + $allele2_array[$diff[$j]] + '</em>';
 	}
 	$return_seqs_array.push($allele2_array.join('').replace('</em><em>', ''));
-	
+
 	} else {
 		$return_seqs_array.push($allele1_array.join(''));
 	}
@@ -615,7 +725,7 @@ function compareAlleleSeqs($gene, $allele1, $allele2) {
 	return $return_seqs_array;
 }
 
-/* 
+/*
  * Get Parameter
  * Returns value of specified variable if variable exists in URI query string
  */
@@ -631,7 +741,7 @@ function getParameter(name) {
   }
 }
 
-/* 
+/*
  * Text Selector
  * Text selection initialization and functions
  */
@@ -660,14 +770,14 @@ TextSelector.Selector.mouseup = function(e) {
 			$('#more').attr('disabled', 'disabled');
 			$('#custom').bind('click', function() {
 				sendNextDNAStrand('applet', 'mw2d:1:stop; select atom all; remove; set DNA ' + st);
-	
+
 				// reveal applet
 				$('#app-container').unbind('click');
 				$('#app-container2').unbind('click');
 				$('#app-container').css({'background-image': 'url(_assets/img/wait.png)'});
 				$('#app-container2').css({'background-image': 'url(_assets/img/click-state2.png)'});
 				var applet_timer = setTimeout('showApplet()', 3000);
-	
+
 				$('#custom').fadeOut('slow');
 			}).fadeIn('fast');
 		}
@@ -690,11 +800,11 @@ function checkAccessLevel($user_level) {
 	   */
 	  $access_genes = {
 						  'ax7fpr9z0': {
-							  			'genes': ['metallic', 'wings', 'horns', 'forelimbs', 'hindlimbs'], 
+							  			'genes': ['metallic', 'wings', 'horns', 'forelimbs', 'hindlimbs'],
 										'labels': ['tail', 'nosespike']
 						  				},
 						  'jbk53901s': {
-							  			'genes': ['tail', 'metallic', 'wings', 'horns', 'forelimbs', 'hindlimbs', 'nosespike'], 
+							  			'genes': ['tail', 'metallic', 'wings', 'horns', 'forelimbs', 'hindlimbs', 'nosespike'],
 										'labels': ['armor']
 						  				},
 						  'mb9jql659': {
@@ -702,34 +812,34 @@ function checkAccessLevel($user_level) {
 									'labels': []
 						  			},
 						  'gb1kdvw3l': {
-							  		'genes': ['tail', 'metallic', 'wings', 'horns', 'color', 'black', 'forelimbs', 'hindlimbs', 'armor', 'deep', 'nosespike', 'otc', 'sdh', 'myo', 'gpi'], 
+							  		'genes': ['tail', 'metallic', 'wings', 'horns', 'color', 'black', 'forelimbs', 'hindlimbs', 'armor', 'deep', 'nosespike', 'otc', 'sdh', 'myo', 'gpi'],
 									'labels': []
 						  			}
 						  };
-						  
+
 	// temporary fix for preventing all but grandmasters from accessing certain armor alleles
 	if ($user_level != 'gb1kdvw3l') {
 		$('#armor-menu option:nth-child(7)').remove();
 		$('#armor-menu option:nth-child(5)').remove();
 		$('#armor-menu option:nth-child(3)').remove();
 	}
-	
+
 	if ($user_level != 'ax7fpr9z0' && $user_level != 'jbk53901s' && $user_level != 'mb9jql659' && $user_level != 'gb1kdvw3l') {
 		$access_array = [];
 		$('#labels').empty();
 		$('#overlay').fadeIn('fast');
 		$('#access-denied').fadeIn('slow');
 	} else {
-	  
+
 	  // update nav links with user level value
 	  $('#nav a').each(function(i) {
 		  this.href = this.href + '?ul=' + $user_level;
 	  });
-	  
+
 	  // determine access levels for current user
 	  var $access_array = $access_genes[$user_level]['genes'];
 	  var $labels_array = $access_genes[$user_level]['labels'];
-	  
+
 	  // turn off genes that user should not have access to
 	  $('select').each(function(i){
 		  var $select_id = this.id;
@@ -747,7 +857,7 @@ function checkAccessLevel($user_level) {
 						$label_match = 1;
 					}
 			  }
-			  
+
 			  if ($label_match == 1) {
 				  $('#' + $select_id).parent().html('<div id="' + $gene_name + '-menu" class="disabled" onclick="changeGene(\'' + $gene_name + '\');">' + $gene_name + '</div>');
 				  $('#' + $gene_name + '-dna').html('<div>??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????&nbsp;Access Denied&nbsp;???<br />???&nbsp;Insufficient&nbsp;???<br />????&nbsp;Privileges&nbsp;????<br />????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????</div>');
@@ -756,7 +866,7 @@ function checkAccessLevel($user_level) {
 			  }
 		  }
 	  });
-	  
+
 	  // show lines for potential bog breath genes
 	  if ($user_level == 'gb1kdvw3l') {
 		  $('#lines').show();
@@ -875,7 +985,7 @@ function Gene(gene_name, top, alleles) {
 	this.gene_name = gene_name; // gene name
 	this.top = top; // gene position (may not be necessary for now)
 	this.alleles = []; // array of alleles
-	
+
 	// add alleles method
 	this.addAllele = addAllele;
 	function addAllele(allele_name, dna_seq) {
@@ -887,7 +997,7 @@ function Gene(gene_name, top, alleles) {
  *
  */
 function Allele(allele_name, dna_seq) {
-	this.allele_name = allele_name;	
+	this.allele_name = allele_name;
 	this.dna_seq = dna_seq;
 }
 
@@ -1012,9 +1122,9 @@ function moveDNAToEquivalentLocation(magTop) {
 	$('#dna').css({top: -dnaPos});
 
 	if (magTop == geneLocations[i][0] || (magTop < geneLocations[i][0] + 2 && magTop > geneLocations[i][0] - 2)) {
-		$('#magnifier').css('background-position', '0 0');	
+		$('#magnifier').css('background-position', '0 0');
 	} else {
-		$('#magnifier').css('background-position', '0 -37px');	
+		$('#magnifier').css('background-position', '0 -37px');
 	}
 
 }

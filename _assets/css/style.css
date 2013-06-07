@@ -7,8 +7,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -19,7 +19,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -104,7 +104,7 @@ button {
 			background: #5fabaf;
 			color: #fee9aa;
 			}
-	
+
 /* GENE OPTIONS AND CHROMOSOME IMAGE
 ------------------------------------------------------*/
 #labels {
@@ -398,9 +398,9 @@ button {
 	word-wrap: break-word;
 	z-index: 1;
 	}
-body.wider #dna, 
-body.wider #dna .gene, 
-body.wider #dna .gene div, 
+body.wider #dna,
+body.wider #dna .gene,
+body.wider #dna .gene div,
 body.wider #dna .junk { width: 175px !important; }
 #tail-dna {
 	left: 0;
@@ -559,16 +559,9 @@ body.wider #dna .junk { width: 175px !important; }
 		z-index: 100;
 		}
 	#details iframe {
-		background: transparent;
-		border: none;
-		display: none;
-		left: 0;
-		height: 320px;
-		opacity: 0;
-		position: absolute;
-		top: 0;
-		width:100%;
-		z-index: 100;
+		position: relative;
+    top: -15px;
+    left: -999em;
 		}
 	#details .applet-wrap {
 		height: 320px;
@@ -682,7 +675,7 @@ body.wider #dna .junk { width: 175px !important; }
 		font-size: 1.1em;
 		font-weight: bold;
 		}
-		
+
 /* SPECIAL INSTRUCTIONS MESSAGE
 ---------------------------------------------------------------------------*/
 #special-instructions {
