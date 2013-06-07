@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Genome Browser</title>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Sofadi+One" />
+<link rel="stylesheet" href="_assets/css/style.css" />
+<style>
+body {
+	background: #65120e url(_assets/img/body-bg.jpg) center 58px no-repeat;
+	background-size: 100%;	
+	}
+@media only screen and (min-width: 320px) {
+	body {
+		background: #65120e;	
+		}
+	#container {
+		top: 168px !important;
+		}
+}
+@media only screen and (min-width: 500px) {
+	body {
+		background: #65120e url(_assets/img/body-bg.jpg) center 58px no-repeat;
+		background-size: 260% !important;	
+		}
+	#container {
+		top: 200px !important;
+		}
+}
+@media only screen and (min-width: 1000px) {
+	body {
+		background: #65120e url(_assets/img/body-bg.jpg) center 58px no-repeat;
+		background-size: 1890px 890px !important;
+		}
+	#container {
+		top: 168px !important;
+		}
+}
+#container {
+	background: transparent;
+	height: auto;
+	left: 50%;
+	margin: 0 0 0 -505px;
+	min-height: 592px;
+	overflow: hidden;
+	position: absolute;
+	top: 168px;
+	width: 1010px;
+	}
+/* NAVIGATION
+------------------------------------------------------*/
+#nav {
+	background: transparent url(_assets/img/topbar-bg.png) repeat-x;
+	color: #fee9aa;
+	height: 57px;
+	left: 0;
+	text-align: center;
+	position: absolute;
+	top: 1px;
+	width: 98.90%;
+	z-index: 300;
+	}
+	#nav li {
+		display: inline;
+		list-style: none;
+		}
+		#nav li a {
+			background: transparent;
+			color: #fee9aa;
+			display: block;
+			padding: 5px 10px;
+			text-align: center;
+			text-decoration: none;
+			border-radius: 13px;
+			}
+		#nav li.current a {
+			background: #5fabaf;
+			color: #fee9aa;
+			}
+
+/* GENE SELECTION OPTIONS
+------------------------------------------------------*/
+#labels {
+	top: 0;
+	}
+	#labels select {
+		width: 94px;
+		}
+
+/* CHROMOSOME IMAGE
+-------------------------------------------------------*/
+#chromosome-one, #chromosome-two, #chromosome-three {
+	background: transparent;
+	display: block;
+	height: 100%;
+	left: 107px;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	width: 102px;
+	}
+	.chromosome .gene-line {
+		background: #fee9aa;
+		height: 5px;
+		left: 10px;
+		margin: 0 auto;
+		position: absolute;
+		width: 81px;
+		z-index: 10;
+		}
+	#short {
+		background: #5fabaf url(_assets/img/chromosome-bg.jpg) repeat-y;
+		height: 230px;
+		margin: 10px auto 0;
+		width: 80px;
+		border-radius: 25px;
+		}
+	#chromosome-one #short {
+		height: 270px;
+		}
+	#chromosome-two #short {
+		height: 170px;
+		}
+	#chromosome-three #short {
+		height: 390px;
+		}
+	#long {
+		background: #5fabaf url(_assets/img/chromosome-bg.jpg) repeat-y;
+		height: 360px;
+		margin: 0 auto 10px;
+		width: 80px;
+		border-radius: 25px;
+		}
+/* DNA SEQUENCE ETC
+--------------------------------------------------------------*/
+#dna {
+	background: #5fabaf;
+	height: 600000px;
+	overflow: hidden;
+	position: absolute;
+	left: 208px;
+	top: 0;
+	width: 164px;
+	}
+	#dna .label { width: 40px; }
+.gene {
+	height: auto;
+	text-wrap: none;
+	width: 164px;
+	word-wrap: break-word;
+	z-index: 100;
+	}
+
+#details {
+	margin: 0;
+	min-height: 592px;
+	overflow: auto;
+	padding-bottom: 200px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 628px;
+	}
+#details #gene-description {
+		background: #fff;
+		color: #572e2e;
+		display: none;
+		float: right;
+		font-size: .9em;
+		height: 290px;
+		margin-top: 10px;
+		overflow-y: scroll;
+		padding: 5px;
+		width: 240px;
+		border-radius: 13px;
+		}
+	#details #gene-description h2 {
+		font-size: 1.3em;
+		font-weight: bold;
+		}
+	#details #gene-description p {
+		margin-bottom: 1em;
+		}
+/* FOOTER
+---------------------------------------------------------------------------*/
+#footer {
+	background: transparent; 
+	color: #fee9aa; 
+	bottom: auto; 
+	clear: both; 
+	font-size: 10px; 
+	height: 20px; 
+	left: 50%; 
+	margin: 0 0 0 -480px; 
+	padding: 5px; 
+	position: absolute;
+	top: 800px;
+	width: 960px;
+	}
+</style>
+</head>
+<body>
+<div id="page">
+<div id="nav">
+  <ul>
+  <li class="current"><a href="index.html">Chromosome 1</a></li>
+  <li><a href="2.html">Chromosome 2</a></li>
+  <li><a href="3.html">X Chromosome</a></li>
+  </ul>
+</div>
+<div id="container">
+  <div class="chromosome" id="chromosome-one">
+    <div id="short">
+      <div id="tail-line" class="gene-line"></div>
+      <div id="metallic-line" class="gene-line"></div>
+    </div>
+    <div id="long">
+      <div id="wings-line" class="gene-line"></div>
+      <div id="horns-line" class="gene-line"></div>
+    </div>
+    <div id="magnifier"></div>
+  </div>
+  <div id="labels">
+    <div id="tail">
+     <form action="#">
+        <select id="tail-menu" onchange="changeGene('tail');">
+          <option value="">Tail alleles:</option>
+          <option value="long-tail">Long</option>
+          <option value="short-tail">Short</option>
+          <option value="kink-tail">Kinked</option>
+          <option value="compare-long-tail+short-tail">Compare Long to Short</option>
+          <option value="compare-long-tail+kink-tail">Compare Long to Kinked</option>
+          <option value="compare-kink-tail+short-tail">Compare Kinked to Short</option>
+        </select>
+      </form>
+    </div>
+    <div id="metallic">
+      <form action="#">
+        <select id="metallic-menu" onchange="changeGene('metallic');">
+          <option value="">Metallic alleles:</option>
+          <option value="metallic">Metallic</option>
+          <option value="non-metallic">Non-Metallic</option>
+          <option value="compare-metallic+non-metallic">Compare Metallic to Non-Metallic</option>
+        </select>
+      </form><br />
+    </div>
+    <div id="wings">
+      <form action="#">
+        <select id="wings-menu" onchange="changeGene('wings');">
+          <option value="">Wings alleles:</option>
+          <option value="wings">Wings</option>
+          <option value="no-wings">No Wings</option>
+          <option value="compare-wings+no-wings">Compare Wings to No Wings</option>
+        </select>
+      </form>    
+    </div>
+    <div id="horns">
+      <form action="#">
+        <select id="horns-menu" onchange="changeGene('horns');">
+          <option value="">Horns alleles:</option>
+          <option value="horns">Horns</option>
+          <option value="no-horns">No Horns</option>
+          <option value="compare-horns+no-horns">Compare Horns to No Horns</option>
+        </select>
+      </form>    
+    </div>
+  </div>
+  <div id="dna">
+    <div id="non-coding-dna"></div>
+    <div id="tail-dna" class="gene"></div>
+    <div id="metallic-dna" class="gene"></div>
+    <div id="wings-dna" class="gene"></div>
+    <div id="horns-dna" class="gene"></div>
+  </div><!-- end #dna -->
+  <div id="details">
+    <div id="app-container">
+      <div class="header"></div>
+      <div class="applet-wrap">
+      <applet id="applet" archive="mwapplet.jar" code="org.concord.modeler.MwApplet" width="680" height="550" mayscript="true" scroll="no">
+        <param name="script" value="page:0:import P2GGenie.cml" />
+      </applet>
+      </div>
+      <iframe></iframe>
+    </div>
+    <div id="app-container2">
+      <div class="header"></div>
+      <div class="applet-wrap">
+      <applet id="applet2" archive="mwapplet.jar" code="org.concord.modeler.MwApplet" width="680" height="550" mayscript="true" scroll="no">
+        <param name="script" value="page:0:import P2GGenie.cml" />
+      </applet>
+      </div>
+      <iframe></iframe>
+    </div>
+    <div id="video-links">
+      <button id="reset-mw" onClick="resetDNA()">Reset DNA</button> <button id="translate-step" onClick="translateStepByStep()">Translate Step by Step</button> <button id="translate-eight" onclick="translateEight()">Translate Eight</button> <button id="focus-last-eight" onClick="focusOnLastEight()">Unfold</button> <button id="refold" onClick="unfocus()">Re-fold</button><br /><br />
+      <a href="_assets/flash/eukTranscription.swf" title="Watch a Video about Transcription" target="_blank">Watch the Transcription Video</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="_assets/flash/eukTranslation.swf" title="Watch a Video about Translation" target="_blank">Watch the Translation Video</a>
+    </div>
+    <div id="drakes">
+	    <p id="drake"><img src="_assets/img/guild-badge.png" /><br />
+        <em>A drake homozygous for the selected allele</em></p>
+    	<p id="drake2" style="display: none;"><img src="_assets/img/drakes/non-metallic.png" /><br />
+        <em>A drake homozygous for the selected allele</em></p>
+    </div><!-- end #drakes -->
+    <div id="gene-description"></div>
+  </div><!-- end #details -->
+</div><!-- end #container -->
+<p id="footer">Supported with funding from the National Science Foundation.</p>
+</div><!-- end #page -->
+<div id="overlay"></div>
+<div id="access-denied">
+  <h2>Gene to Protein Genie Access Denied.</h2>
+</div>
+<button id="custom">Send Selected Sequence</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script src="_assets/js/scripts-new.js"></script>
+</body>
+</html>
