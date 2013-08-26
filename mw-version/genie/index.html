@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Genome Browser</title>
+<link rel="stylesheet" href="_assets/css/style.css" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-6899787-33']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<div id="page">
+<div id="container">
+  <div id="nav">
+    <ul>
+    <li class="current"><a href="index.html">Chromosome 1</a></li>
+    <li><a href="2.html">Chromosome 2</a></li>
+    <li><a href="3.html">X Chromosome</a></li>
+    </ul>
+  </div>
+  <div class="chromosome" id="chromosome-one">
+    <div id="short">
+      <div id="tail-line" class="gene-line"></div>
+      <div id="metallic-line" class="gene-line"></div>
+    </div>
+    <div id="long">
+      <div id="wings-line" class="gene-line"></div>
+      <div id="horns-line" class="gene-line"></div>
+    </div>
+    <div id="magnifier"></div>
+  </div>
+  <div id="labels">
+    <div id="tail">
+     <form action="#">
+        <select id="tail-menu" onchange="changeGene('tail');">
+          <option value="">Tail alleles:</option>
+          <option value="long-tail">Long</option>
+          <option value="short-tail">Short</option>
+          <option value="kink-tail">Kinked</option>
+          <option value="compare-long-tail+short-tail">Compare Long to Short</option>
+          <option value="compare-long-tail+kink-tail">Compare Long to Kinked</option>
+          <option value="compare-kink-tail+short-tail">Compare Kinked to Short</option>
+        </select>
+      </form>
+      <!--<div style="background: #aaa; cursor: pointer; margin: 0 auto 0 4px; padding: 2px 5px; width: 75px;" onclick="changeGene(this, 'tail')">Tail</div>-->
+    </div>
+    <div id="metallic">
+      <form action="#">
+        <select id="metallic-menu" onchange="changeGene('metallic');">
+          <option value="">Metallic alleles:</option>
+          <option value="metallic">Metallic</option>
+          <option value="non-metallic">Non-Metallic</option>
+          <option value="compare-metallic+non-metallic">Compare Metallic to Non-Metallic</option>
+        </select>
+      </form><br />
+    </div>
+    <div id="wings">
+      <form action="#">
+        <select id="wings-menu" onchange="changeGene('wings');">
+          <option value="">Wings alleles:</option>
+          <option value="wings">Wings</option>
+          <option value="no-wings">No Wings</option>
+          <option value="compare-wings+no-wings">Compare Wings to No Wings</option>
+        </select>
+      </form>    
+    </div>
+    <div id="horns">
+      <form action="#">
+        <select id="horns-menu" onchange="changeGene('horns');">
+          <option value="">Horns alleles:</option>
+          <option value="horns">Horns</option>
+          <option value="no-horns">No Horns</option>
+          <option value="compare-horns+no-horns">Compare Horns to No Horns</option>
+        </select>
+      </form>    
+    </div>
+  </div>
+  <div id="dna">
+    <div id="non-coding-dna"></div>
+    <div id="tail-dna" class="gene"></div>
+    <div id="metallic-dna" class="gene"></div>
+    <div id="wings-dna" class="gene"></div>
+    <div id="horns-dna" class="gene"></div>
+  </div><!-- end #dna -->
+  <div id="details">
+    <div id="app-container">
+      <div class="header"></div>
+      <div class="applet-wrap">
+      <applet id="applet" archive="mwapplet.jar" code="org.concord.modeler.MwApplet" width="680" height="550" mayscript="true" scroll="no">
+        <param name="script" value="page:0:import P2GGenie.cml" />
+      </applet>
+      </div>
+      <iframe></iframe>
+    </div>
+    <div id="app-container2">
+      <div class="header"></div>
+      <div class="applet-wrap">
+      <applet id="applet2" archive="mwapplet.jar" code="org.concord.modeler.MwApplet" width="680" height="550" mayscript="true" scroll="no">
+        <param name="script" value="page:0:import P2GGenie.cml" />
+      </applet>
+      </div>
+      <iframe></iframe>
+    </div>
+    <div id="video-links">
+      <button id="unfold" onClick="unfold('applet')">Unfold</button> <button id="refold" onClick="refold('applet')">Re-fold</button> <button id="more">Send Next 60 Letters</button> <button id="reset" onClick="resetDNA()">Reset DNA</button><br /><br />
+      <a href="_assets/flash/eukTranscription.swf" title="Watch a Video about Transcription" target="_blank">Watch the Transcription Video</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="_assets/flash/eukTranslation.swf" title="Watch a Video about Translation" target="_blank">Watch the Translation Video</a>
+    </div>
+    <div id="drakes">
+	    <p id="drake"><img src="_assets/img/guild-badge.png" /><br />
+        <em>A drake homozygous for the selected allele</em></p>
+    	<p id="drake2" style="display: none;"><img src="_assets/img/drakes/non-metallic.png" /><br />
+        <em>A drake homozygous for the selected allele</em></p>
+    </div><!-- end #drakes -->
+    <div id="gene-description"></div>
+  </div><!-- end #details -->
+  <p style="background: #79849a; color: #fee9aa; bottom: -20px; clear: both; font-size: 10px; height: 20px; left: -10px; margin: 10px; padding: 5px; position: absolute; width: 100%; z-index: 200;">Supported with funding from the National Science Foundation.</p>
+</div><!-- end #container -->
+</div><!-- end #page -->
+<div id="overlay"></div>
+<div id="access-denied">
+  <h2>Gene to Protein Genie Access Denied.</h2>
+</div>
+<button id="custom">Send Selected Sequence</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script src="_assets/js/scripts.js"></script>
+</body>
+</html>
