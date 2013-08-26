@@ -1,0 +1,45 @@
+#content {
+  margin-left: 2em; }
+
+#chart {
+  background-color: #f9eec1;
+  width: 960px;
+  height: 500px;
+  border: solid 1px #f4b626;
+  margin: 1em 0 0 1em;
+  padding: 0;
+  position: relative;
+  border-radius: 0.5em; }
+
+svg.graph:focus {
+  outline: rgba(46, 192, 236, 0.2) solid 0.2em; }
+svg.graph text.title {
+  font-size: 0.9em; }
+svg.graph text.ylabel {
+  font-size: 0.8em; }
+svg.graph text.xlabel {
+  font-size: 0.8em; }
+svg.graph text.axis {
+  font-size: 0.8em; }
+  svg.graph text.axis:focus {
+    outline: rgba(46, 192, 236, 0.2) solid 0.2em; }
+svg.graph rect.draggable-axis {
+  fill: rgba(255, 255, 255, 0); }
+  svg.graph rect.draggable-axis:hover {
+    fill: rgba(196, 196, 196, 0.2); }
+svg.graph .ruler.hidden {
+  visibility: hidden; }
+svg.graph circle {
+  fill: none;
+  fill-opacity: 0.2;
+  stroke: steelblue;
+  cursor: move; }
+  svg.graph circle.selected {
+    fill: #ff7f0e;
+    stroke: #ff7f0e; }
+  svg.graph circle:hover {
+    fill: #ff7f0e;
+    stroke: #707f0e; }
+  svg.graph circle.selected:hover {
+    fill: #ff7f0e;
+    stroke: #ff7f0e; }

@@ -1,0 +1,139 @@
+{
+  "title": "Geniverse Gene to Protein",
+  "publicationStatus": "public",
+  "subtitle": "",
+  "about": [
+    "Geniverse Gene to Protein Genie"
+  ],
+  "fontScale": 0.75,
+  "models": [
+    {
+      "id": "page3$0",
+      "url": "imports/legacy-mw-content/converted/sam-activities/DNA-to-proteins/page3/page3$0.json",
+      "viewOptions": {
+        "enableKeyboardHandlers": false
+      },
+      "modelOptions": {
+        "DNA": "AAAAAAAAAAA",
+        "DNAState": "intro-cells"
+      },
+      "onLoad": [
+        "onPropertyChange('state', function(s) {",
+        "  console.log('animating to '+s);",
+        "  animateToDNAState(s); ",
+        "});",
+        "onPropertyChange('snapState', function(s) {",
+        "  console.log('snapping to '+s);",
+        "  set('DNAState', s); ",
+        "});"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "name": "state",
+      "initialValue": "intro-cells"
+    },
+    {
+      "name": "snapState",
+      "initialValue": "intro-cells"
+    },
+    {
+      "name": "restraintsAdded",
+      "initialValue": false
+    }
+  ],
+  "components": [
+    {
+      "type": "button",
+      "id": "transcribe",
+      "text": "Transcribe",
+      "action": [
+        "set('geneticEngineState', 'dna');",
+        "animateToDNAState('transcription-end');"
+      ]
+    },
+    {
+      "type": "button",
+      "id": "transcribe-step",
+      "text": "Transcribe step by step",
+      "action": "transcribeDNAStep();"
+    },
+    {
+      "type": "button",
+      "id": "translate",
+      "text": "Translate",
+      "action": [
+        "set('geneticEngineState', 'transcription-end');",
+        "animateToDNAState('translation-end');"
+      ]
+    },
+    {
+      "type": "button",
+      "id": "translate-step",
+      "text": "Translate step by step",
+      "action": "translateDNAStep();"
+    },
+    {
+      "type": "button",
+      "id": "unfold",
+      "text": "Unfold protein",
+      "action": [
+        "var num = getNumberOfAtoms();                                        ",
+        "var x1  = get('viewPortX') - 0.5;                                    ",
+        "var x2  = get('viewPortX') + get('viewPortWidth') + 0.5;             ",
+        "var y   = get('viewPortY') + get('viewPortHeight') / 2;              ",
+        "var restraintsAdded = get('restraintsAdded');                        ",
+        "if (!restraintsAdded) {                                              ",
+        "  addRestraint({atomIndex: 0, k: 50, x0: x1, y0: y});                ",
+        "  addRestraint({atomIndex: num-1, k: 50, x0: x2, y0: y})             ",
+        "  set('restraintsAdded', true);                                      ",
+        "} else {                                                             ",
+        "  setRestraintProperties(0, {k:50, x0: x1, y0: y});                  ",
+        "  setRestraintProperties(1, {atomIndex: num-1, k:50, x0: x2, y0: y});",
+        "}                                                                    "
+      ]
+    },
+    {
+      "type": "button",
+      "id": "refold",
+      "text": "Refold protein",
+      "action": [
+        "if (get('restraintsAdded')) {        ",
+        " setRestraintProperties(0, {k:0});   ",
+        " setRestraintProperties(1, {k:0});   ",
+        "}                                    "
+      ]
+    }
+  ],
+  "template": [
+    {
+      "id": "right",
+      "left": "model.right",
+      "height": "interactive.height",
+      "padding-left": "0.5em"
+    }
+  ],
+  "layout": {
+    "right": [
+      [
+        "transcribe"
+      ],
+      [
+        "transcribe-step"
+      ],
+      [
+        "translate"
+      ],
+      [
+        "translate-step"
+      ],
+      [
+        "unfold"
+      ],
+      [
+        "refold"
+      ]
+    ]
+  }
+}

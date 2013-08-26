@@ -1,0 +1,2868 @@
+<!DOCTYPE html>
+<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <title>
+      Lab: Technical Documentation
+    </title>
+    <meta content='text/xhtml; charset=utf-8' http-equiv='content-type'>
+    <meta content='all' name='distribution'>
+    <meta content='all' name='robots'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300italic,400,300,700&amp;subset=latin,greek,latin-ext' rel='stylesheet' type='text/css' />
+    <link href="readme.css" media="screen" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="main">
+      <h1 id="lab-framework">Lab Framework</h1>
+
+<p>HTML5-based open source scientific models, visualizations, graphing, and probeware from the
+<a href="http://www.concord.org">Concord Consortium</a>.</p>
+
+<ul>
+  <li><strong><a href="http://lab.concord.org/">lab.concord.org</a></strong> <em>(production)</em></li>
+  <li><strong><a href="http://lab.dev.concord.org/">lab.dev.concord.org</a></strong> <em>(development)</em></li>
+  <li><strong><a href="http://lab.dev.concord.org/readme.html">Developer Readme</a></strong> <em>(working demo links)</em></li>
+  <li><strong><a href="https://github.com/concord-consortium/lab">github.com/concord-consortium/lab</a></strong> <em>(source)</em></li>
+</ul>
+
+<p><em>Note: some of the demo links in this readme do not resolve properly at
+<a href="https://github.com/concord-consortium/lab">github.com/concord-consortium/lab</a>.
+A live version of the readme is always available here:
+<a href="http://lab.dev.concord.org/readme.html">lab.dev.concord.org/readme.html</a>.</em></p>
+
+<p><strong>Table of Contents</strong></p>
+
+<ul id="markdown-toc">
+  <li><a href="#licensing">Licensing</a></li>
+  <li><a href="#model-type-examples">Model-type examples</a>    <ul>
+      <li><a href="#md2d-model-type-2d-molecular-modeling">MD2D model-type: 2D molecular modeling</a>        <ul>
+          <li><a href="#md2d-basic-2d-molecular-modeling">MD2D: Basic 2D molecular modeling</a></li>
+          <li><a href="#md2d-using-macroscopic-units-with-the-molecular-modeling-engine">MD2D: Using macroscopic units with the molecular modeling engine</a></li>
+          <li><a href="#md2d-protein-and-dna">MD2D: Protein and DNA</a></li>
+          <li><a href="#md2d-light-and-matter-simple-quantum-dymanics">MD2D: Light and Matter (simple quantum dymanics)</a></li>
+        </ul>
+      </li>
+      <li><a href="#solar-system-model-type">Solar System model-type</a></li>
+      <li><a href="#signal-generator-model-type">Signal generator model-type</a></li>
+      <li><a href="#probeware-sensor-model-type">Probeware (sensor) model-type</a></li>
+    </ul>
+  </li>
+  <li><a href="#additional-examples">Additional examples</a>    <ul>
+      <li><a href="#graphing-examples">Graphing examples</a></li>
+      <li><a href="#probeware">Probeware</a></li>
+      <li><a href="#energy2d-thermal-simulation">Energy2D: thermal simulation</a></li>
+    </ul>
+  </li>
+  <li><a href="#distribution-of-project-and-examples">Distribution of Project and Examples</a></li>
+  <li><a href="#setup-development">Setup Development</a>    <ul>
+      <li><a href="#prerequisites">Prerequisites:</a>        <ul>
+          <li><a href="#rvm-ruby-19-and-the-rubygem-bundler">RVM, Ruby 1.9 and the RubyGem bundler</a></li>
+          <li><a href="#nodejs-and-npm-the-node-package-manager">nodejs and npm, the Node Package Manager</a></li>
+          <li><a href="#java">Java</a>            <ul>
+              <li><a href="#customize-maven-mirror">Customize Maven mirror</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#linux-ubuntu">Linux (Ubuntu)</a>        <ul>
+          <li><a href="#nodejs-and-npm">nodejs and npm</a></li>
+          <li><a href="#known-problems-with-linux-during-lab-build-process">Known problems with Linux during Lab build process</a></li>
+        </ul>
+      </li>
+      <li><a href="#use-git-to-create-a-local-clone-of-the-lab-repository">Use git to create a local clone of the Lab repository.</a></li>
+      <li><a href="#setup-the-local-lab-repository-for-development">Setup the local Lab repository for development</a>        <ul>
+          <li><a href="#automatic-build-processing-using-guard">Automatic build processing using Guard</a></li>
+          <li><a href="#startup-the-rack-based-lab-server-for-local-development">Startup the Rack-based Lab server for local development</a>            <ul>
+              <li><a href="#jnlpapp-rack-application-service">JnlpApp Rack Application Service</a></li>
+            </ul>
+          </li>
+          <li><a href="#building-the-classic-java-applications-and-the-sensor-java-applet">Building the Classic Java applications and the Sensor Java Applet</a>            <ul>
+              <li><a href="#running-the-classic-java-molecular-workbench-and-energy2d-as-applications">Running the Classic Java Molecular Workbench and Energy2D as Applications</a></li>
+              <li><a href="#java-code-signing-certificate-and-keystore">Java Code-Signing Certificate and Keystore</a></li>
+              <li><a href="#building-the-java-resources">Building the Java Resources</a></li>
+            </ul>
+          </li>
+          <li><a href="#java-builddeploy-integration">Java build/deploy integration</a>            <ul>
+              <li><a href="#java-projects-build-strategies">Java Projects Build Strategies</a></li>
+              <li><a href="#working-with-the-sensor-projects-source">Working with the Sensor projects source</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#project-configuration">Project Configuration</a>    <ul>
+      <li><a href="#interactive-share-link">Interactive Share link</a></li>
+      <li><a href="#google-analytics">Google Analytics</a></li>
+      <li><a href="#limitations-changing-configuration-in-an-archive-distribution">Limitations changing configuration in an archive distribution</a></li>
+    </ul>
+  </li>
+  <li><a href="#contributing-to-lab">Contributing to Lab</a></li>
+  <li><a href="#continuous-integration-on-travis-ci">Continuous Integration on travis-ci</a>    <ul>
+      <li><a href="#setting-up-travis-ci-integration">Setting up travis-ci integration</a></li>
+    </ul>
+  </li>
+  <li><a href="#repository-structure">Repository structure</a>    <ul>
+      <li><a href="#vendor">vendor/</a></li>
+      <li><a href="#src">src/</a>        <ul>
+          <li><a href="#srclab">src/lab/</a>            <ul>
+              <li><a href="#srclabmd2d">src/lab/md2d</a>                <ul>
+                  <li><a href="#md2d-headless-mode">MD2D Headless Mode</a></li>
+                  <li><a href="#node-binrun-md2dhttpsgithubcomconcord-consortiumlabblobmasternode-binrun-md2d"><a href="https://github.com/concord-consortium/lab/blob/master/node-bin/run-md2d"><code>node-bin/run-md2d</code></a></a></li>
+                  <li><a href="#writing-new-scripts">Writing new scripts</a></li>
+                  <li><a href="#md2d-simulation-stepping">MD2D simulation stepping</a></li>
+                </ul>
+              </li>
+              <li><a href="#srclabsolar-system">src/lab/solar-system/</a></li>
+              <li><a href="#srclabsignal-generator">src/lab/signal-generator/</a></li>
+              <li><a href="#srclabsensor">src/lab/sensor/</a></li>
+              <li><a href="#srclabgrapher">src/lab/grapher/</a></li>
+              <li><a href="#srclabcommon">src/lab/common/</a></li>
+              <li><a href="#srclabimport-export">src/lab/import-export/</a></li>
+              <li><a href="#srclabenergy2d">src/lab/energy2d/</a></li>
+            </ul>
+          </li>
+          <li><a href="#srcexamples-srcdoc-and-srcexperiments">src/examples/, src/doc/, and src/experiments/</a></li>
+          <li><a href="#srcresources">src/resources</a></li>
+          <li><a href="#srcjnlp">src/jnlp</a></li>
+          <li><a href="#srcsass">src/sass</a></li>
+          <li><a href="#srchelpers">src/helpers</a></li>
+        </ul>
+      </li>
+      <li><a href="#javascript-dependency-management-and-build-process---requrejs">JavaScript Dependency Management and Build Process - RequreJS</a>        <ul>
+          <li><a href="#adding-new-source-file-intended-to-work-in-the-web-browser">Adding new source file intended to work in the Web browser</a></li>
+          <li><a href="#adding-new-source-file-intended-to-work-in-the-web-browser-and-in-node">Adding new source file intended to work in the Web browser and in Node</a></li>
+          <li><a href="#adding-new-module-which-should-be-built-as-a-separate-library">Adding new module which should be built as a separate library</a></li>
+          <li><a href="#module-build-configuration---buildjs-file">Module Build Configuration - *.build.js file</a></li>
+          <li><a href="#module-public-api---public-apijs-file">Module Public API - public-api.js file</a></li>
+          <li><a href="#coffeescript-files-support">CoffeeScript Files Support</a></li>
+        </ul>
+      </li>
+      <li><a href="#generated-examples-publicexamples">Generated Examples: <code>public/examples/</code></a></li>
+      <li><a href="#html-and-css-generation">HTML and CSS Generation</a></li>
+    </ul>
+  </li>
+  <li><a href="#testing-test">Testing: <code>test/</code></a>    <ul>
+      <li><a href="#a-simple-example-of-test-driven-development">A Simple Example of Test Driven Development</a></li>
+      <li><a href="#debugging-tests-using-the-node-debugger">Debugging Tests using the node debugger</a>        <ul>
+          <li><a href="#using-node-inspector-while-debugging">Using node-inspector while debugging</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#physical-constants-and-units">Physical constants and units</a>    <ul>
+      <li><a href="#units">Units</a></li>
+      <li><a href="#physical-constants">Physical Constants</a></li>
+      <li><a href="#unit-conversions">Unit conversions</a>        <ul>
+          <li><a href="#converting-a-value-between-two-unit-types">Converting a value between two unit types:</a></li>
+          <li><a href="#finding-the-ratio-between-two-unit-types-and-rolling-your-own-unit-conversions">Finding the ratio between two unit types and rolling your own unit conversions:</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#deployment">Deployment</a>    <ul>
+      <li><a href="#deploying-static-content-to-a-github-gh-pages-branch">Deploying static content to a Github gh-pages branch</a>        <ul>
+          <li><a href="#making-the-public-folder-track-the-gh-pages-branch">Making the <code>public/</code> folder track the gh-pages branch</a></li>
+          <li><a href="#pushing-changes-to-gh-pages-branch">Pushing changes to gh-pages branch</a></li>
+        </ul>
+      </li>
+      <li><a href="#deploying-to-a-remote-server">Deploying to a remote server</a>        <ul>
+          <li><a href="#aws-setupprerequisites">AWS Setup/Prerequisites</a></li>
+        </ul>
+      </li>
+      <li><a href="#using-capstrano-to-deploy-new-code-to-an-existing-server">Using Capstrano to deploy new code to an existing server</a></li>
+      <li><a href="#updating-the-java-jar-resources-on-a-remote-rerver">Updating the Java jar resources on a remote rerver</a></li>
+      <li><a href="#managing-aws-servers-with-thor-tasks">Managing AWS servers with thor tasks</a></li>
+      <li><a href="#creating-a-new-aws-lab-server">Creating a new AWS Lab Server</a></li>
+    </ul>
+  </li>
+  <li><a href="#references">References</a>    <ul>
+      <li><a href="#molecular-simulation">Molecular Simulation</a>        <ul>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#reduced-units">Reduced Units</a></li>
+        </ul>
+      </li>
+      <li><a href="#javascript-library-runtime-dependencies">JavaScript Library Runtime Dependencies</a>        <ul>
+          <li><a href="#d3">D3</a></li>
+          <li><a href="#jquery">JQuery</a></li>
+          <li><a href="#jquery-ui">JQuery-UI</a></li>
+          <li><a href="#sizzle">Sizzle</a></li>
+          <li><a href="#codemirror">Codemirror</a></li>
+          <li><a href="#sciencejs">science.js</a></li>
+          <li><a href="#dspjs">dsp.js</a></li>
+          <li><a href="#modernizr">Modernizr</a></li>
+          <li><a href="#mathjax">MathJax</a></li>
+          <li><a href="#opensans-font">OpenSans Font</a></li>
+        </ul>
+      </li>
+      <li><a href="#development-dependencies">Development Dependencies</a>        <ul>
+          <li><a href="#node">node</a></li>
+          <li><a href="#npm">npm</a></li>
+          <li><a href="#requirejs">RequireJS</a></li>
+          <li><a href="#coffeescript">CoffeeScript</a></li>
+        </ul>
+      </li>
+      <li><a href="#rubygems">RubyGems</a>        <ul>
+          <li><a href="#bundler">Bundler</a></li>
+          <li><a href="#haml">Haml</a></li>
+          <li><a href="#sass">Sass</a></li>
+          <li><a href="#guard">Guard</a></li>
+          <li><a href="#thor">Thor</a></li>
+          <li><a href="#fog">Fog</a></li>
+        </ul>
+      </li>
+      <li><a href="#additional-testing-dependencies">Additional Testing Dependencies</a>        <ul>
+          <li><a href="#vows">Vows</a></li>
+          <li><a href="#jsdom">jsdom</a></li>
+        </ul>
+      </li>
+      <li><a href="#miscellaneous">Miscellaneous</a>        <ul>
+          <li><a href="#livereload">livereload</a></li>
+        </ul>
+      </li>
+      <li><a href="#full-screen-api">Full Screen API</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="licensing">Licensing</h2>
+
+<p>Lab is Copyright 2012 (c) by the Concord Consortium and is distributed under
+any of the following licenses:</p>
+
+<ul>
+  <li><a href="http://www.opensource.org/licenses/BSD-2-Clause">Simplified BSD</a>,</li>
+  <li><a href="http://www.opensource.org/licenses/MIT">MIT</a>, or</li>
+  <li><a href="http://www.opensource.org/licenses/Apache-2.0">Apache 2.0</a>.</li>
+</ul>
+
+<p>The complete licensing details can be read <a href="license.html">here</a>.</p>
+
+<p>If you have have received a <strong>distribution archive</strong> of the
+<a href="https://github.com/concord-consortium/lab">Concord Consortium Lab project</a>
+our copyright applies to all resources <strong>except</strong> the files in the
+<code>vendor/</code> directory. The files in the <code>vendor/</code> directory are from
+third-parties and are distributed under either BSD, MIT, or Apache 2.0 licenses.</p>
+
+<h2 id="model-type-examples">Model-type examples</h2>
+
+<p>The Lab framework supports embedding multiple model-types into the Lab Interactive form.
+Each of the examples below also has an <strong>embeddable</strong> form that fluidly scales to the browser
+window it is rendered in and is designed to be easily embedded using an iframe.</p>
+
+<p><em>Note: these demo links do not resolve properly at
+<a href="https://github.com/concord-consortium/lab">github.com/concord-consortium/lab</a>.
+A live version of the readme where these links work is always available here:
+<a href="http://lab.dev.concord.org/readme.html">lab.dev.concord.org/readme.html</a>.</em></p>
+
+<h3 id="md2d-model-type-2d-molecular-modeling">MD2D model-type: 2D molecular modeling</h3>
+
+<h4 id="md2d-basic-2d-molecular-modeling">MD2D: Basic 2D molecular modeling</h4>
+
+<ol>
+  <li><a href="interactives.html#interactives/samples/1-oil-and-water-shake.json">Oil and water</a>, <em>(<a href="embeddable.html#interactives/samples/1-oil-and-water-shake.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/samples/3-100-atoms.json">Charged and neutral atoms</a>, <em>(<a href="embeddable.html#interactives/samples/3-100-atoms.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/sam/gas-laws/3-volume-pressure-relationship.json">The volume-pressure relationship</a>, <em>(<a href="embeddable.html#interactives/sam/gas-laws/3-volume-pressure-relationship.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/sam/gas-laws/4-temperature-volume-relationship.json">The temperature-volume relationship</a>, <em>(<a href="embeddable.html#interactives/sam/gas-laws/4-temperature-volume-relationship.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/sam/phase-change/6-phase-changes-caused-by-energy-input-two-bar-graphs.json">Phase changes with two bar graphs</a>, <em>(<a href="embeddable.html#interactives/sam/phase-change/6-phase-changes-caused-by-energy-input-two-bar-graphs.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/sam/diffusion/2-temperature.json">Diffusion and temperature</a>, <em>(<a href="embeddable.html#interactives/sam/diffusion/2-temperature.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/visual/recycling/2-metalforces.json">Force and deformation in a metal-like material</a>, <em>(<a href="embeddable.html#interactives/visual/recycling/2-metalforces.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/visual/recycling/1-ceramicforces.json">Force and deformation in a ceramic-like material</a>, <em>(<a href="embeddable.html#interactives/visual/recycling/1-ceramicforces.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/visual/recycling/3-plasticforces.json">Force and deformation in a plastic-like material</a>, <em>(<a href="embeddable.html#interactives/visual/recycling/3-plasticforces.json">embeddable</a>)</em></li>
+</ol>
+
+<h4 id="md2d-using-macroscopic-units-with-the-molecular-modeling-engine">MD2D: Using macroscopic units with the molecular modeling engine</h4>
+
+<p>Normally MD2D uses units of femtoseconds and nanometers however it is also possible
+to use the same engine with MKS macroscopic units. In the models listed below modeling
+Coulomb forces is turned off and the Lennard-Jones force modeling has no effect.</p>
+
+<ol>
+  <li><a href="interactives.html#interactives/inquiry-space/pendulum/1-pendulum.json">Pendulum</a>, <em>(<a href="embeddable.html#interactives/inquiry-space/pendulum/1-pendulum.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/inquiry-space/pendulum/2-spring.json">Spring</a>, <em>(<a href="embeddable.html#interactives/inquiry-space/pendulum/2-spring.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/inquiry-space/pendulum/3-springy-pendulum.json">Springy pendulum</a>, <em>(<a href="embeddable.html#interactives/inquiry-space/pendulum/3-springy-pendulum.json">embeddable</a>)</em></li>
+</ol>
+
+<h4 id="md2d-protein-and-dna">MD2D: Protein and DNA</h4>
+
+<p><em>Currently in early development.</em></p>
+
+<ol>
+  <li><a href="interactives.html#interactives/samples/5-amino-acids.json">Protein folding</a>, <em>(<a href="embeddable.html#interactives/samples/5-amino-acids.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/sam/DNA-to-proteins/3-modeling-translation.json">DNA transcription and translation folding</a>, <em>(<a href="embeddable.html#interactives/sam/DNA-to-proteins/3-modeling-translation.json">embeddable</a>)</em></li>
+</ol>
+
+<h4 id="md2d-light-and-matter-simple-quantum-dymanics">MD2D: Light and Matter (simple quantum dymanics)</h4>
+
+<p>A plugin for MD2D.</p>
+
+<p><em>Currently in early development.</em></p>
+
+<ol>
+  <li><a href="interactives.html#interactives/conversion-tests/quantum-collision.json">Quantum collision</a>, <em>(<a href="embeddable.html#interactives/conversion-tests/quantum-collision.json">embeddable</a>)</em></li>
+  <li><a href="interactives.html#interactives/conversion-tests/quantum-emission.json">Quantum emission</a>, <em>(<a href="embeddable.html#interactives/conversion-tests/quantum-emission.json">embeddable</a>)</em></li>
+</ol>
+
+<h3 id="solar-system-model-type">Solar System model-type</h3>
+
+<p><em>Currently in early development.</em></p>
+
+<ul>
+  <li><a href="interactives.html#interactives/solar-system/earth.json">Earth in orbit</a>, <em>(<a href="embeddable.html#interactives/solar-system/earth.json">embeddable</a>)</em></li>
+</ul>
+
+<h3 id="signal-generator-model-type">Signal generator model-type</h3>
+
+<p><em>Currently in early development.</em></p>
+
+<p>The signal-generator is a very simple model-type that was developed as a scaffold for building a sensor model-type.</p>
+
+<ul>
+  <li><a href="interactives.html#interactives/signal-generator/signal-generator.json">Signal generator</a>, <em>(<a href="embeddable.html#interactives/signal-generator/signal-generator.json">embeddable</a>)</em></li>
+</ul>
+
+<h3 id="probeware-sensor-model-type">Probeware (sensor) model-type</h3>
+
+<p><em>Currently in early development.</em></p>
+
+<p>NOTE: this interactive uses an invisible Java applet to connect to a
+<a href="http://www.vernier.com/products/sensors/motion-detectors/go-mot/">Vernier GoMotion</a>
+sonar ranger.</p>
+
+<ul>
+  <li><a href="interactives.html#interactives/sensor/sensor.json">Sensor: Vernier GoMotion</a>, <em>(<a href="embeddable.html#interactives/sensor/sensor.json">embeddable</a>)</em></li>
+</ul>
+
+<h2 id="additional-examples">Additional examples</h2>
+
+<h3 id="graphing-examples">Graphing examples</h3>
+
+<ol>
+  <li><a href="examples/grapher/grapher.html">Line graphs</a></li>
+  <li><a href="examples/grapher-bar-graph/bar-graph.html">Bar graphs</a></li>
+</ol>
+
+<p><strong>Experimental</strong></p>
+
+<ul>
+  <li><a href="experiments/dsp/dsp.html">Digital signal processing graphs</a></li>
+</ul>
+
+<h3 id="probeware">Probeware</h3>
+
+<p>NOTE: this interactive uses an invisible Java applet to connect to a number of different
+commercial probeware inerfaces from <a href="http://www.vernier.com/">Vernier</a>.</p>
+
+<ol>
+  <li><a href="http://www.vernier.com/products/interfaces/go-link/">Vernier GoLink</a></li>
+  <li><a href="http://www.vernier.com/products/sensors/temperature-sensors/go-temp/">Vernier GoTemp</a></li>
+  <li><a href="http://www.vernier.com/products/sensors/motion-detectors/go-mot/">Vernier GoMotion</a></li>
+  <li><a href="http://www.vernier.com/products/interfaces/lq-mini/">Vernier LabQuest</a></li>
+</ol>
+
+<p><a href="experiments/goio-sensor-grapher/index.html">Vernier Sensor Grapher</a> <em>(only works on web-server)</em></p>
+
+<h3 id="energy2d-thermal-simulation">Energy2D: thermal simulation</h3>
+
+<p>NOTE: The Energy2D thermal simulation models are not yet integrated into the Lab Interactive form.</p>
+
+<ul>
+  <li><a href="examples/energy2d-model/energy2d-model.html">Energy2D Models</a></li>
+  <li><a href="examples/energy2d-gpu-model/energy2d-model.html#interactives/vortex-street100.json">Energy2D Models (WebGL physics solvers)</a></li>
+</ul>
+
+<h2 id="distribution-of-project-and-examples">Distribution of Project and Examples</h2>
+
+<p>Compressed archives of the generated Lab distribution are available for download:</p>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tarball/gh-pages">Lab distribution (tar.gz archive)</a> <em>(32MB)</em></li>
+  <li><a href="https://github.com/concord-consortium/lab/zipball/gh-pages">Lab distribution (zip archive)</a> <em>(42MB)</em></li>
+</ul>
+
+<p>Download and expand one of these archives to create a folder named <code>concord-consortium-lab-xxxxxxx</code>.
+The seven characters at the end of the archive filename are the first seven characters of the git
+commit SHA.</p>
+
+<p>To access the content on your local you will need to serve the files from a web server running on your
+local computer. Once there open the file index.html in the expanded archive.</p>
+
+<p>For example Chrome generates this error when I try and load the sample Oil and Water Interactive directly
+from my filesystem:</p>
+
+<pre><code>XMLHttpRequest cannot load file:///Users/stephen/Downloads/concord-consortium-lab-9771ec6/interactives/samples/1-oil-and-water-shake.json.
+Origin null is not allowed by Access-Control-Allow-Origin.
+</code></pre>
+
+<h2 id="setup-development">Setup Development</h2>
+
+<p>Lab uses a number of RubyGems and node modules to manage development. Lab’s test framework
+uses <a href="http://vowsjs.org">Vows</a> amd <a href="http://visionmedia.github.io/mocha/">Mocha</a> which both depend
+on <a href="http://nodejs.org/">nodejs</a> and <a href="http://npmjs.org/">npm</a> the Node Package Manager.</p>
+
+<p>In addition JavaScript minification is done using <a href="https://github.com/mishoo/UglifyJS">UglifyJS</a>.
+JavaScript dependency management is handled by <a href="http://requirejs.org/">RequireJS</a>.</p>
+
+<h3 id="prerequisites">Prerequisites:</h3>
+
+<h4 id="rvm-ruby-19-and-the-rubygem-bundler">RVM, Ruby 1.9 and the RubyGem bundler</h4>
+
+<p>We normally use <a href="https://rvm.io/">RVM</a> to mange our development dependency on <a href="http://www.ruby-lang.org/en/">Ruby 1.9.3</a>
+and the specific Ruby Gems needed for building Lab and running the Lab server.</p>
+
+<ol>
+  <li><a href="https://rvm.io/rvm/install/">Install RVM</a></li>
+</ol>
+
+<p>After installation you should see something like the following:</p>
+
+<pre><code>$  ruby -v
+ruby 1.9.3p392 (2013-02-22 revision 39386) [x86_64-darwin10.8.0]
+</code></pre>
+
+<p>If you already have RVM installed update to the most up-to-date stable version.</p>
+
+<pre><code>$ rvm get stable
+</code></pre>
+
+<p>Once you have a working version of Ruby 1.9.3 check to see if the RubyGem <a href="http://gembundler.com/">bundler</a>
+is already installed:</p>
+
+<pre><code>$ gem list bundler
+
+*** LOCAL GEMS ***
+
+bundler (1.3.5)
+</code></pre>
+
+<p>If Bundler is not installed install it now into the global gemset for ruby-1.9.3-p392</p>
+
+<pre><code>$ rvm gemset use global
+$ gem install bundler
+Fetching: bundler-1.3.5.gem (100%)
+Successfully installed bundler-1.3.5
+1 gem installed
+</code></pre>
+
+<h4 id="nodejs-and-npm-the-node-package-manager">nodejs and npm, the Node Package Manager</h4>
+
+<p><a href="http://nodejs.org/">nodejs</a> and <a href="http://npmjs.org/">npm</a>, the Node Package Manager are additional
+development dependencies.</p>
+
+<p><a href="http://npmjs.org/">npm</a>, the Node Package Manager is included as part of <a href="http://nodejs.org/">nodejs</a></p>
+
+<p>Install the latest stable version of node (currently v0.10.4) with installers available here: <a href="http://nodejs.org/#download">http://nodejs.org/#download</a></p>
+
+<p>Currently development is being done with these versions of node and npm:</p>
+
+<pre><code>$ node -v
+v0.10.4
+
+$ npm -v
+1.2.18
+</code></pre>
+
+<h4 id="java">Java</h4>
+
+<p>Java is needed for compiling the invisible sensor applet as well as the legacy Java applications we are porting to HTML5.</p>
+
+<p>Test to see if Java is installed and available:</p>
+
+<pre><code>$ java -version
+java version "1.6.0_33"
+Java(TM) SE Runtime Environment (build 1.6.0_33-b03-424-11M3720)
+Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03-424, mixed mode)
+</code></pre>
+
+<p>On Mac OS X 10.7 and later Java is not automatically installed. However running the command
+<code>java -version</code> when Java is not installed will bring up an operating system dialog enabling
+Java to be installed.</p>
+
+<h5 id="customize-maven-mirror">Customize Maven mirror</h5>
+
+<p><strong>Note:</strong> Currently in order to compile OTrunk a very old version of the maven jarjar plugin is
+needed (v0.4). Only newer versions of the jarjar plugin are available in the public Maven artifact
+repositories. Until OTrunk is updated you will need to include the Concord nexus Maven mirror
+(which has v0.4 of the maven jarjar plugin) in <code>~/.m2/settings.xml</code>.</p>
+
+<p>A minimal working <code>~/.m2/settings.xml</code> will look like this:</p>
+
+<pre><code>&lt;?xml version="1.0"?&gt;
+&lt;settings&gt;
+  &lt;mirrors&gt;
+    &lt;mirror&gt;
+      &lt;id&gt;nexus&lt;/id&gt;
+      &lt;mirrorOf&gt;*&lt;/mirrorOf&gt;
+      &lt;url&gt;http://source.concord.org/nexus/content/groups/public&lt;/url&gt;
+    &lt;/mirror&gt;
+  &lt;/mirrors&gt;
+&lt;/settings&gt;
+</code></pre>
+
+<h3 id="linux-ubuntu">Linux (Ubuntu)</h3>
+
+<p>Before any of this make sure that “run command as login shell” is checked. if it isn’t go to edit-profile
+preferences-Title and Command, and check Run command as a login shell.</p>
+
+<p>To <a href="https://rvm.io/rvm/install/">Install RVM</a> you need to have curl:</p>
+
+<pre><code>$ sudo apt-get install curl &lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+
+<p>Install RVM using curl with:</p>
+
+<pre><code>$ curl -L https://get.rvm.io | bash -s stable --ruby
+</code></pre>
+
+<p>After RVM has finnished installing it will ask you to run a command similar to</p>
+
+<pre><code>$ source /home/user_name/.rvm/scripts/rvm
+</code></pre>
+
+<p>After installation you should see something like the following:</p>
+
+<pre><code>$  ruby -v
+ruby 1.9.3p194 (2012-04-20 revision 35410) [x86_64-linux]
+</code></pre>
+
+<p>RVM has some additional dependancies, to view these type:</p>
+
+<pre><code>$ rvm requirements
+</code></pre>
+
+<p>Under additional dependancies and ruby, copy the list of dependancies and paste them in to your terminal
+and install them using <code>sudo</code>. The command will look something like this:</p>
+
+<pre><code>sudo /usr/bin/apt-get install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+
+<p>Becouse of some unknown bugs RVM doesn’t recognise readline without being explictly pointed to it.
+To do this I’ve had to reinstall ruby 1.9.3-p194.</p>
+
+<p>$ rvm reinstall 1.9.3-p194 –with-zlib1g-dev</p>
+
+<p><a href="http://gembundler.com/">ruby gem bundler</a> should be installed. To check if it has been try:</p>
+
+<pre><code>$ gem list bundler
+
+*** LOCAL GEMS ***
+
+bundler (1.3.5)
+</code></pre>
+
+<p>If it doesn’t return anything install Bundler:</p>
+
+<pre><code>$ gem install bundler
+</code></pre>
+
+<h4 id="nodejs-and-npm">nodejs and npm</h4>
+
+<p><a href="http://nodejs.org/">nodejs</a> and <a href="http://npmjs.org/">npm</a>, the Node Package Manager are additional
+development dependencies.</p>
+
+<p><a href="http://npmjs.org/">npm</a>, the Node Package Manager has been included as part of <a href="http://nodejs.org/">nodejs</a>
+since version 0.6.3.</p>
+
+<p>To install the latest stable versions of node you first need to add this PPA repositories:</p>
+
+<ol>
+  <li><a href="https://launchpad.net/~chris-lea/+archive/node.js/">node PPA repo</a></li>
+</ol>
+
+<p>For this to work as intended python software properties must also be installed.</p>
+
+<pre><code>$ sudo apt-get install python-software-properties
+$ sudo apt-add-repository ppa:chris-lea/node.js
+$ sudo apt-get update
+</code></pre>
+
+<p>Now install node and npm:</p>
+
+<pre><code>$ sudo apt-get install nodejs npm
+</code></pre>
+
+<p>Neither the Java run time environment nor the Java development kit are installed by
+default, both of which are used for the java projects.</p>
+
+<pre><code>sudo apt-get install  default-jre openjdk-6-jdk
+</code></pre>
+
+<p>The Ruby Gem Nokogiri requires libxslt and libxml2, install them with:</p>
+
+<pre><code>sudo apt-get install libxslt-dev libxml2-dev
+</code></pre>
+
+<p>Final note, before you <code>make everything</code> setup the project configurations files by copying the
+configuration samples:</p>
+
+<pre><code>cp config/config.sample.yml config/config.yml
+</code></pre>
+
+<h4 id="known-problems-with-linux-during-lab-build-process">Known problems with Linux during Lab build process</h4>
+
+<ul>
+  <li>
+    <p>D3.js build process fails:</p>
+
+    <pre><code>  locale: Cannot set LC_ALL to default locale: No such file or directory
+</code></pre>
+
+    <p>Solution:</p>
+
+    <pre><code>  $ sudo locale-gen en_US
+</code></pre>
+  </li>
+  <li>
+    <p>D3.js build process fails:</p>
+
+    <pre><code>  make[1]: /usr/lib/nodejs:/usr/share/javascript/uglify-js/bin/uglifyjs: Command not found
+</code></pre>
+
+    <p>Workaround:</p>
+
+    <pre><code>  $ unset NODE_PATH
+</code></pre>
+
+    <p>and try to build the project again.</p>
+  </li>
+</ul>
+
+<h3 id="use-git-to-create-a-local-clone-of-the-lab-repository">Use git to create a local clone of the Lab repository.</h3>
+
+<p>If you have commit access to the repository use this form:</p>
+
+<pre><code>git clone git@github.com:concord-consortium/lab.git
+</code></pre>
+
+<p>Alternatively if you don’t have commit access use this form:</p>
+
+<pre><code>git clone git://github.com/concord-consortium/lab.git
+</code></pre>
+
+<h3 id="setup-the-local-lab-repository-for-development">Setup the local Lab repository for development</h3>
+
+<p>Make sure you have already installed the prerequistes: <a href="http://www.ruby-lang.org/en/">Ruby 1.9</a>,
+the RubyGem <a href="http://gembundler.com/">bundler</a>, and <a href="http://nodejs.org/">nodejs</a> (which now includes
+<a href="http://npmjs.org/">npm</a> the Node Package Manager.</p>
+
+<p>Open a shell and change to the <code>lab/</code> directory. The first time you <code>cd</code> into the <code>lab/</code> directory RVM will
+ask you if this <em>new</em> <code>.rvmrc</code> file should be trusted.</p>
+
+<p>The <code>.rvmrc</code> specifies that this project dependeds on Ruby 1.9.3-p194 and all the required Ruby Gems
+will be installed in the RVM gemset named <code>ruby-1.9.3-p194@lab</code>.</p>
+
+<pre><code>cd lab
+make everything
+</code></pre>
+
+<p>When <code>make everything</code> is run on a freshly cloned repository it performs the following tasks:</p>
+
+<ol>
+  <li>
+    <p>Install the runtime dependencies as git submodules into the <code>vendor/</code> directory:</p>
+
+    <pre><code>git submodule update --init --recursive
+</code></pre>
+  </li>
+  <li>
+    <p>Install the development dependencies that use <a href="http://nodejs.org/">nodejs</a> and
+are managed by <a href="http://npmjs.org/">npm</a>:</p>
+
+    <pre><code>npm install
+</code></pre>
+
+    <p>You can see the list of dependencies to be installed in the file <code>package.json</code>. In addition
+<code>vendor/d3</code> and <code>vendor/science.js</code> are manually installed into <code>node_modules/</code>.</p>
+  </li>
+  <li>
+    <p>Install the additional RubyGems used for development: haml, sass, guard …</p>
+
+    <pre><code>bundle install --binstubs
+</code></pre>
+
+    <p>This creates the <code>bin/</code> directory and populates it with command-line executables for running
+the specific versions of the RubyGems installed for development.</p>
+  </li>
+  <li>
+    <p>Generates the <code>public</code> directory:</p>
+  </li>
+  <li>
+    <p>Generates the Java resources in the <code>public/jnlp</code> directory:</p>
+  </li>
+</ol>
+
+<p>You should now be able to open the file: <code>public/index.html</code> in a browser and run some of the examples.</p>
+
+<h4 id="automatic-build-processing-using-guard">Automatic build processing using Guard</h4>
+
+<p>Start watching the <code>src/</code> and <code>test/</code> directories with <a href="#guard">Guard</a> and when files are
+changed automatically generate the JavaScript Lab modules, the examples, and run the tests.</p>
+
+<pre><code>bin/guard
+</code></pre>
+
+<p>Now any change you make in <code>src/examples/</code> will generate the corresponding content in <code>public/examples/</code>.
+In addition changes in <code>src/lab/</code> generate the associated Lab modules in <code>lab/</code> and copy these modules
+to <code>public/lab/</code>. In addition any change in either the <code>src/lab/</code> or <code>test/</code>directories will run the
+tests and display the results in the console window where <code>bin/guard</code>
+is running.</p>
+
+<h4 id="startup-the-rack-based-lab-server-for-local-development">Startup the Rack-based Lab server for local development</h4>
+
+<p>The Lab server is a simple Rack application.</p>
+
+<pre><code>bin/rackup config.ru
+</code></pre>
+
+<p>Now open http://localhost:9292/index.html</p>
+
+<h5 id="jnlpapp-rack-application-service">JnlpApp Rack Application Service</h5>
+
+<p>The Rack server also uses the <a href="https://github.com/concord-consortium/lab/tree/master/lib/rack/jnlp.rb">Rack::Jnlp</a> for
+servicing requests for Java Web Start JNLPs and versioned jar resources.</p>
+
+<p>Normally versions for jars can only be specified by using a jnlp form. A jnlp form of specification can be used for webstart and also for applets.</p>
+
+<p>The older form of applet invocation that uses the &lt;applet&gt; html element normally can’t specify version numbers for jar dependencies, however the Jnlp::Rack application included with Lab does allow version specification.</p>
+
+<p>Example: right now on my local system there are two different versions of the vernier-goio-macosx-x86_64-nar.jar:</p>
+
+<pre><code>$ ls -l public/jnlp/org/concord/sensor/vernier/vernier-goio/vernier-goio-macosx-x86_64-nar*
+  98396 May 28 01:55 ../org/concord/sensor/vernier/vernier-goio/vernier-goio-macosx-x86_64-nar__V1.5.0-20101012.203835-2.jar
+  99103 May 28 16:40 ../org/concord/sensor/vernier/vernier-goio/vernier-goio-macosx-x86_64-nar__V1.5.0-20120528.164030-3.jar
+</code></pre>
+
+<p>Note the different lengths for the two different versions.</p>
+
+<p>If a request comes in from Java for vernier-goio-macosx-x86_64-nar.jar the most recent version is returned:</p>
+
+<pre><code>$ curl --user-agent java -I http://localhost:9292/jnlp/org/concord/sensor/vernier/vernier-goio/vernier-goio-macosx-x86_64-nar.jar
+HTTP/1.1 200 OK
+Last-Modified: Mon, 28 May 2012 20:40:34 GMT
+Content-Type: application/java-archive
+Content-Length: 99103
+</code></pre>
+
+<p>However the version number can be added as a http query parameter.</p>
+
+<pre><code>$ curl --user-agent java -I http://localhost:9292/jnlp/org/concord/sensor/vernier/vernier-goio/vernier-goio-macosx-x86_64-nar.jar?version-id=1.5.0-20101012.203835-2
+HTTP/1.1 200 OK
+Last-Modified: Mon, 28 May 2012 05:55:05 GMT
+Content-Type: application/java-archive
+Content-Length: 98396
+x-java-jnlp-version-id: 1.5.0-20101012.203835-2
+</code></pre>
+
+<p>Note that in the response the x-java-jnlp-version-id HTTP header is added with teh actual version.</p>
+
+<p>This feature of specifying versioned jar resources should NOT be used for production because Java won’t properly cache the jar locally. Eveytime a request is made for a jar with a version-id query parameter the complete jar will be downloaded again.</p>
+
+<p>When a version is specified in a jnlp form for an applet the jar WILL be cached properly.</p>
+
+<p><strong>Development Note</strong>: If the applets no longer operate properly it may be that the server is no longer operating properly
+and needs to be restarted. The Java console log for the applet may show requests made for jars that are not fulfilled.</p>
+
+<p>If a request like the following produces an error:</p>
+
+<pre><code>$ curl --user-agent java -I http://localhost:9292/jnlp/org/concord/sensor-native/sensor-native.jar
+HTTP/1.1 500 Internal Server Error
+</code></pre>
+
+<p>Restart the server and the request should now succeed:</p>
+
+<pre><code>$ curl --user-agent java -I http://localhost:9292/jnlp/org/concord/sensor-native/sensor-native.jar
+HTTP/1.1 200 OK
+Last-Modified: Thu, 07 Jun 2012 16:44:28 GMT
+Content-Type: application/java-archive
+Content-Length: 34632
+content-encoding: pack200-gzip
+</code></pre>
+
+<h4 id="building-the-classic-java-applications-and-the-sensor-java-applet">Building the Classic Java applications and the Sensor Java Applet</h4>
+
+<p>The Lab repository can build the legacy Java applications Molecular Workbench and Energy2D we
+are converting to HTML5.</p>
+
+<p>Building these Java applications allows developers to more easily compare the operation
+of the HTML5 versions of these applications to the Java versions running in he browser as applets.</p>
+
+<p>In addition we can create the Java resources to run the invisible Java applet needed for communicating
+with Vernier GoIO probware in the browser however the Java resources for communicating with the
+Vernier GoIO Probeware need to be digitally signed.</p>
+
+<h5 id="running-the-classic-java-molecular-workbench-and-energy2d-as-applications">Running the Classic Java Molecular Workbench and Energy2D as Applications</h5>
+
+<p>After building the Java resources the Java applications Molecular Workbench and Energy2D can be
+run as applications from the command line:</p>
+
+<ol>
+  <li>
+    <p>Molecular Workbench</p>
+
+    <pre><code> bin/mw
+</code></pre>
+  </li>
+  <li>
+    <p>Energy2D</p>
+
+    <pre><code> bin/energy2d
+</code></pre>
+  </li>
+</ol>
+
+<h5 id="java-code-signing-certificate-and-keystore">Java Code-Signing Certificate and Keystore</h5>
+
+<p>A self-signed Java certificate is included with the Lab repository: <code>config/lab-sample-keystore,jks</code>
+with a password and private key password of <em>abc123</em> however for production use you will want to use
+a keystore with a publically-recognized Java code-siging certificate from a company like
+<a href="http://www.thawte.com/code-signing/index.html">Thawte</a>.</p>
+
+<p>To build the Jar resources for the probeware using either the self-signed certificate provided
+with the Lab repository or one of your own first create the file <code>config/config.yml</code> by
+copying <code>config/config.sample.yml</code> and editing appropriately.</p>
+
+<pre><code>cp config/config.sample.yml config/config.yml
+</code></pre>
+
+<p>The <code>:java:</code> section of the <code>config.yml</code> yaml file looks like this:</p>
+
+<pre><code>---
+# password and alias for Java siging certificate.
+:java:
+  :password: abc123
+  :alias: lab-sample-keystore
+  :keystore_path: config/lab-sample-keystore.jks
+</code></pre>
+
+<p>If you have a keystore already accessible via an alias replace <code>lab-sample-keystore</code> with
+the alias for your existing keystore. If your keystore is stored in your home directory in the
+file <code>.keystore</code> then you do should leave the <code>:keystore_path</code> empty.</p>
+
+<pre><code>:keystore_path:
+</code></pre>
+
+<p>The self-signed <code>lab-sample-keystore,jks</code> keystore was generated with the Java keytool command as follows:</p>
+
+<pre><code>$ keytool -genkey -keyalg RSA -keystore config/lab-sample-keystore,jks -alias lab-sample-keystore -storepass abc123 -validity 360 -keysize 2048
+What is your first and last name?
+  [Unknown]:  Stephen Bannasch
+What is the name of your organizational unit?
+  [Unknown]:  Lab Project
+What is the name of your organization?
+  [Unknown]:  Concord Consortium
+What is the name of your City or Locality?
+  [Unknown]:  Concord
+What is the name of your State or Province?
+  [Unknown]:  Massachusetts
+What is the two-letter country code for this unit?
+  [Unknown]:  US
+Is CN=Stephen Bannasch, OU=Lab Project, O=Concord Consortium, L=Concord, ST=Massachusetts, C=US correct?
+  [no]:  yes
+Enter key password for &lt;lab-sample-keystore&gt;
+	(RETURN if same as keystore password):
+
+$ keytool -selfcert -alias lab-sample-keystore -keystore config/lab-sample-keystore.jks
+Enter keystore password:
+</code></pre>
+
+<h5 id="building-the-java-resources">Building the Java Resources</h5>
+
+<p><strong>Note:</strong> Currently in order to compile OTrunk you need to include the Concord nexus Maven mirror in <code>~/.m2/settings.xml</code>. See <a href="#customize_aven_mirror">Customize Maven mirror</a></p>
+
+<p>Run <code>make jnlp-all</code> to erase, build, package, sign and deploy all the Java resurces.</p>
+
+<p>The first time this task is run it:</p>
+
+<ol>
+  <li>Creates a <code>java/</code> top-level directory and checks out the required Java projects into this directory.</li>
+  <li>Builds each of the projects</li>
+  <li>Copies the jar resources into the <code>public/jnlp/</code> directory packing and signing them as needed.</li>
+</ol>
+
+<p>Later if you have made updates in the Java source code or need to re-build and deploy for any reason you
+can run:</p>
+
+<pre><code>script/build-and-deploy-jars.rb --maven-update
+</code></pre>
+
+<p>If one of the maven projects fails to build because a dependency could not be found try running
+the command again with the <code>--maven-update</code> argument:</p>
+
+<pre><code>script/build-and-deploy-jars.rb --maven-update
+</code></pre>
+
+<p>Details about each Java project, where the repository is located, what branch is compiled, the specific
+compilation details are all contained in this Ruby file:
+<a href="https://github.com/concord-consortium/lab/blob/master/config/java-projects.rb"><code>config/java-projects.rb</code></a></p>
+
+<h4 id="java-builddeploy-integration">Java build/deploy integration</h4>
+
+<p>There is a configuration file expressed in Ruby code here which defines build specifications
+for each Java project:
+<a href="https://github.com/concord-consortium/lab/blob/master/config/java-projects.rb"><code>config/java-projects.rb</code></a></p>
+
+<p>The specification indicates whether the Java Jar resource will be directly downloaded or whether the
+source code will be checked-out and compiled to create the Jar.</p>
+
+<h5 id="java-projects-build-strategies">Java Projects Build Strategies</h5>
+
+<p>The <code>:build_type</code> option is used to specify the Java Projects Build Strategy.
+Five different kinds of build strategies are available. Each strategy includes
+additional build information in the <code>:build</code> option.</p>
+
+<p>The <code>:maven</code>, <code>:custom</code>, and <code>:ant</code> build strategies all expect to be able to get the source
+code to build projects from git repositories.</p>
+
+<p>Most of Concord Consportium’s open source Java codebase is published at our public Subversion
+repository: <a href="http://svn.concord.org/svn/projects/trunk">svn.concord.org/svn/projects/trunk</a>
+however all of the legacy Java code the Lab project references is also mirrored to separate git
+repositories at: <a href="https://github.com/concord-consortium/">github.com/concord-consortium/</a>.</p>
+
+<p>The <code>trunk</code> branches in the git mirrors we maintain such as:
+<a href="https://github.com/concord-consortium/otrunk/tree/trunk">concord-consortium/otrunk</a> always represent
+the latest code checked into the Subversion <code>trunk</code> branch.</p>
+
+<p>We have made small changes to the Molecular Workbench codebase and we are maintaining these in
+the <code>master</code> branch of the git mirror here: <a href="https://github.com/concord-consortium/mw">concord-consortium/mw</a>.</p>
+
+<ol>
+  <li>
+    <p><code>:maven</code></p>
+
+    <p>Concord’s sensor applet framework uses the <code>:maven</code> build strategy:</p>
+
+    <pre><code> 'sensor-applets' =&gt; { :build_type =&gt; :maven,
+                       :build =&gt; MAVEN_STD_CLEAN_BUILD,
+                       :repository =&gt; 'git://github.com/concord-consortium/sensor-applets.git',
+                       :branch =&gt; 'master',
+                       :path =&gt; 'org/concord/sensor/sensor-applets',
+                       :has_applet_class =&gt; true,
+                       :sign =&gt; true },
+</code></pre>
+
+    <p>The <code>master</code> branch of the sensor-applets repo will be checked out into <code>./java/sensor-applets</code> and be built using Maven.
+ Because the sensor-applets jar is used with native libraries, it must also be signed.</p>
+
+    <p><strong>Deploying both signed and unsigned jars</strong></p>
+
+    <p>Concord’s Molecular Workbench also uses the <code>:maven</code> build strategy however when running
+ it as a Java Web Start jnlp it needs to be signed while normally when run as an applet it
+ should be unsigned.</p>
+
+    <pre><code> 'mw'             =&gt; { :build_type =&gt; :maven,
+                       :build =&gt; MAVEN_STD_CLEAN_BUILD,
+                       :repository =&gt; 'git://github.com/concord-consortium/mw.git',
+                       :branch =&gt; 'master',
+                       :path =&gt; 'org/concord/modeler',
+                       :main_class =&gt; "org.concord.modeler.ModelerLauncher",
+                       :has_applet_class =&gt; true,
+                       :sign =&gt; true,
+                       :also_unsigned =&gt; true }
+</code></pre>
+
+    <p>By setting both the <code>:sign</code> and <code>:also_unsigned</code> options to <code>true</code> two jars will be deployed:</p>
+
+    <ul>
+      <li><code>jnlp/org/concord/modeler/mw.jar</code></li>
+      <li><code>jnlp/org/concord/modeler/unsigned/mw.jar</code></li>
+    </ul>
+  </li>
+  <li><code>:ant</code></li>
+  <li>
+    <p><code>:custom</code></p>
+
+    <p>For Energy2D a <code>:custom</code> build strategy is used and the command line invocation necessary is in the
+ <code>MANUAL_JAR_BUILD</code> constant.</p>
+
+    <pre><code> 'energy2d' =&gt; { :repository =&gt; 'git://github.com/concord-consortium/energy2d.git',
+                 :branch =&gt; 'trunk',
+                 :path =&gt; 'org/concord/energy2d',
+                 :build_type =&gt; :custom,
+                 :version =&gt; '0.1.0',
+                 :build =&gt; MANUAL_JAR_BUILD,
+                 :has_applet_class =&gt; true,
+                 :sign =&gt; false }
+</code></pre>
+
+    <p>In this case <code>MANUAL_JAR_BUILD</code> has been defined as:</p>
+
+    <pre><code> MANUAL_JAR_BUILD = "rm -rf bin; mkdir bin; find src -name *.java | xargs javac -target 5 -sourcepath src -d bin"
+</code></pre>
+  </li>
+  <li><code>:copy_jars</code></li>
+  <li>
+    <p><code>:download</code></p>
+
+    <p>goio-jna uses the <code>:download</code> build strategy:</p>
+
+    <pre><code> 'goio-jna'       =&gt; { :build_type =&gt; :download,
+                       :url =&gt; 'http://source.concord.org/nexus/content/repositories/cc-repo-internal-snapshot/org/concord/sensor/goio-jna/1.0-SNAPSHOT/goio-jna-1.0-20121109.222028-22.jar',
+                       :version =&gt; '1.0-20121109.222028-22',
+                       :path =&gt; 'org/concord/sensor/goio-jna',
+                       :sign =&gt; true }
+</code></pre>
+  </li>
+</ol>
+
+<p>The script that runs the checkout-build-pack-sign-deploy can either operate on ALL projects specified or on a smaller number.</p>
+
+<p>Running <code>script/build-and-deploy-jars.rb</code> with no arguments operates on all projects listed in config/java-projects.rb.</p>
+
+<p>Optionally you can specify one or more projects to operate on. This builds just sensor and sensor-applets:</p>
+
+<pre><code>script/build-and-deploy-jars.rb sensor sensor-applets
+</code></pre>
+
+<p>The Jar resources deployed to the <code>public/jnlp</code> directory include a timestamp in the deployed artifact so unless you specifically
+request an earlier version you will always get the latest version deployed.</p>
+
+<h5 id="working-with-the-sensor-projects-source">Working with the Sensor projects source</h5>
+
+<p>Most of the sensor related java jars are being downloaded as jars, not
+compiled from source. If you’re interested in building them from source:</p>
+
+<ol>
+  <li>
+    <p>Clone the <a href="https://github.com/concord-consortium/sensor-projects">concord-consortium/sensor-projects</a> repo:</p>
+
+    <pre><code> git clone https://github.com/concord-consortium/sensor-projects.git sensor-projects
+</code></pre>
+
+    <p>sensor-projects includes these resources:</p>
+
+    <pre><code> sensor-projects/
+   README
+   ftdi-serial-wrapper/
+   goio-jna/
+   labpro-usb-jna/
+   labquest-jna/
+   pasco-jna/
+   pom.xml/
+   sensor/
+   sensor-native/
+   sensor-pasco/
+   sensor-vernier/
+</code></pre>
+  </li>
+  <li>
+    <p>Link the individual project folder into <code>java/</code></p>
+
+    <pre><code> rm -rf java/goio-jna
+ ln -s /path/to/sensor-projects/goio-jna java/goio-jna
+</code></pre>
+  </li>
+  <li>
+    <p>Update <code>config/java-projects.rb</code> to use a <code>:maven</code> type build, but <em>without</em> <code>:repo</code> or <code>:branch</code> specified</p>
+
+    <pre><code> 'goio-jna'  =&gt; { :build_type =&gt; :maven,
+                  :build =&gt; MAVEN_STD_CLEAN_BUILD,
+                  :path =&gt; 'org/concord/sensor/goio-jna',
+                  :sign =&gt; true }
+</code></pre>
+  </li>
+  <li>
+    <p>Rebuild the project using <code>script/build-and-deploy-jars.rb</code></p>
+
+    <pre><code> script/build-and-deploy-jars.rb --maven-update goio-jna
+</code></pre>
+  </li>
+  <li>
+    <p>Repeat 2 - 4 for any other projects you’d like to build from source</p>
+  </li>
+</ol>
+
+<h2 id="project-configuration">Project Configuration</h2>
+
+<p>Configuration variables used by the runtime JavaScript code are available in the JavaScript global
+object <code>Lab.config</code>.</p>
+
+<p>In a full build environment the JavaScript configuration is set in the <code>:jsconfg</code> section of
+<code>config/config.yml</code>:</p>
+
+<pre><code>:jsconfig:
+  :sharing: true
+  :home: http://lab.concord.org
+  :homeForSharing:
+  :homeInteractivePath: /examples/interactives/interactive.html
+  :homeEmbeddablePath: embeddable.html
+  :utmCampaign: &lt;external-campaign-key&gt;
+</code></pre>
+
+<p><strong><code>sharing</code></strong> A boolean attribute used to determine if the <strong>Share</strong> link in the Interactives will be enabled.
+The default value for this is <code>true</code>.</p>
+
+<p><strong><code>home</code></strong> Url used to reference cannonical site when sharing is turned off.</p>
+
+<p><strong><code>homeForSharing</code></strong> Set :homeForSharing to the host where shared Interactives are found
+if you don’t want to share the ones on the actual server. Example if you host the
+Interactives on a static S3 site and want the sharing links to point to the same
+Interactives at “http://lab.concord.org”</p>
+
+<p><strong><code>homeInteractivePath</code></strong> Path to page to run non-embeddable version of Interactives.</p>
+
+<p><strong><code>homeEmbeddablePath</code></strong> Path to page to run embeddable version of Interactives.</p>
+
+<p><strong><code>utmCampaign</code></strong> If present a UTM suffix is added to links in the About box.
+Set to a string which identifies the external organization.</p>
+
+<p>When the build environment is active these values are used to generate JavaScript code integrated
+into the project by the Ruby program:
+<a href="https://github.com/concord-consortium/lab/blob/master/script/generate-js-config.rb"><code>script/generate-js-config.rb</code></a></p>
+
+<h3 id="interactive-share-link">Interactive Share link</h3>
+
+<p>Normally the <strong>Share</strong> link in an Interactive is enabled. The <strong>Share</strong> dialog allows a user to more easily
+share the Interactive in an email or IM, and also provides generated HTML content that can be copied and pasted
+to embed the Interactive into a blog or web page.</p>
+
+<p>If you are hosting this content on an external server where supporting
+sharing is impractical in some manner you can disable the display of the Interactive <strong>Share</strong> link by setting
+<code>:sharing</code> in <code>config/config.yml</code> to <code>false</code>:</p>
+
+<pre><code>:jsconfig:
+  :sharing: false
+  :home: http://lab.concord.org
+  :homeForSharing: http://lab.concord.org
+  :homeInteractivePath: /examples/interactives/interactive.html
+  :homeEmbeddablePath: embeddable.html
+  :utmCampaign: &lt;external-campaign-key&gt;
+</code></pre>
+
+<p>The additional values for <code>:home</code>, <code>homeInteractivePath</code>, and <code>homeEmbeddablePath</code> are used to construct an
+additional paragraph in the Interactive <strong>About</strong> box providing a link to the Interactive on the production
+<a href="http://lab.concord.org">site for the project</a>.</p>
+
+<p>You can also enable Sharing <strong>but</strong> use a separate host for generating the sharing urls by entering a value
+for <strong>homeForSharing</strong>. If you are <em>also</em> hosting the the Lab Interactives in a subdirectory you must also
+set the values for <strong>homeEmbeddablePath</strong> and <strong>homeInteractivePath</strong> as shown above.</p>
+
+<p>The value for <code>utmCampaign</code> is optional. If present and the <strong>home</strong> site has enabled Google Analytics
+setting a value for <code>utmCampaign</code> will allow better tracking of users who click through links in the
+Interactive <strong>About</strong> box.</p>
+
+<h3 id="google-analytics">Google Analytics</h3>
+
+<p>In addition there is a optional section in <code>config/config.yml</code> which if present enables embedding google
+analytics script into the head of the main <code>index.html</code> and all html pages in the <code>examples/</code> and <code>doc/</code>
+directories. This includes all the Interactives which are located in <code>examples/interactives</code> directory.</p>
+
+<p>Include your Google Analytics account number here to enable insertion of the Google Analytics
+script by the build system into the generated HTML pages.</p>
+
+<pre><code>:google_analytics:
+  :account_id: &lt;account-id&gt;
+</code></pre>
+
+<p>The content from which the embedded Google Analytics script is generated is contained in this Ruby file:
+<a href="https://github.com/concord-consortium/lab/blob/master/script/setup.rb"><code>script/setup.rb</code></a>.</p>
+
+<h3 id="limitations-changing-configuration-in-an-archive-distribution">Limitations changing configuration in an archive distribution</h3>
+
+<p>If you have downloaded a distribution archive you can manually modify the code that initializes the JavaScript
+runtime configuration in the files: <code>lab/lab.js</code> and <code>lab/lab.min.js</code>. Editing the value for <code>Lab.config.sharing</code>
+in these files will affect the JavaScript runtime settings when these files are loaded.</p>
+
+<p>Additionally you can turn on UTM suffixes by adding a string value to <code>Lab.config.utmCampaign</code>`.</p>
+
+<p>However generation and insertion of the Google Analytics script into HTML pages can only be done by
+setting a value for the <code>:google_analytics :account_id</code> and running the build process.</p>
+
+<h2 id="contributing-to-lab">Contributing to Lab</h2>
+
+<p>If you think you’d like to contribute to Lab as an external developer:</p>
+
+<ol>
+  <li>
+    <p>Create a local clone from the repository located here: http://github.com/concord-consortium/lab.
+This will by default have the git-remote name: <strong>origin</strong>.</p>
+  </li>
+  <li>
+    <p>Make a fork of http://github.com/concord-consortium/lab to your account on github.</p>
+  </li>
+  <li>
+    <p>Make a new git-remote referencing your fork. I recommend making the remote name your github user name.
+For example my username is <code>stepheneb</code> so I would add a remote to my fork like this:</p>
+
+    <pre><code> git remote add stepheneb git@github.com:stepheneb/lab.git
+</code></pre>
+  </li>
+  <li>
+    <p>Create your changes on a topic branch. Please include tests if you can. When your commits are ready
+push your topic branch to your fork and send a pull request.</p>
+  </li>
+</ol>
+
+<h2 id="continuous-integration-on-travis-ci">Continuous Integration on travis-ci</h2>
+
+<p><a href="http://travis-ci.org">travis-ci</a> is a free open-source web-based distributed continuous integration system.</p>
+
+<p>When code is checked in to the master branch the <a href="http://travis-ci.org/#!/concord-consortium/lab">concord-consortium/lab</a>
+project on <a href="http://travis-ci.org">travis-ci</a> automatically runs all the unit tests.</p>
+
+<p>If any test fails the author of the commit will get an email as well the developers listed in the
+<a href="https://github.com/concord-consortium/lab/blob/master/.travis.yml">.travis.yml</a> configuration file.</p>
+
+<h3 id="setting-up-travis-ci-integration">Setting up travis-ci integration</h3>
+
+<p>I created an account on <a href="http://travis-ci.org">travis-ci</a> linked to the <a href="https://github.com/stepheneb">stepheneb</a>
+acocunt on github by having travis-ci authenticate me with github using oauth.</p>
+
+<p>I was then able to manually setup a Travis service hook for the lab repository. I needed to
+do this manually because I was integrating a repository under the concord-consortium github
+organization instead of one directly under my own account.</p>
+
+<p>Useful <a href="http://travis-ci.org">travis-ci</a> resources</p>
+
+<ul>
+  <li><a href="http://about.travis-ci.org/docs/dev/overview/">The Travis Architecture</a></li>
+  <li><a href="http://about.travis-ci.org/docs/user/how-to-setup-and-trigger-the-hook-manually/">How to setup and trigger the hook manually</a></li>
+  <li><a href="http://about.travis-ci.org/docs/user/build-configuration/">Build configuration</a></li>
+  <li><a href="http://about.travis-ci.org/docs/user/languages/ruby/">Ruby projects</a></li>
+  <li><a href="http://about.travis-ci.org/docs/user/languages/javascript-with-nodejs/">Nodejs projects</a></li>
+  <li><a href="http://about.travis-ci.org/docs/user/gui-and-headless-browsers/">GUI and Headless Browser testing</a></li>
+</ul>
+
+<h2 id="repository-structure">Repository structure</h2>
+
+<h3 id="vendor">vendor/</h3>
+
+<p><a href="#javascript-library-runtime-dependencies">Third-party JavaScript runtime dependencies</a>
+for Lab are located in the
+<strong><a href="https://github.com/concord-consortium/lab/tree/master/vendor"><code>vendor/</code></a></strong>
+directory and are installed as git submodules
+the first time <code>make</code> is run in a new checkout of the source code repository.</p>
+
+<p>Only the necessary JavaScript library files and other resources needed for runtime operation along
+with the associated README and LICENSE files are copied to <strong><code>public/vendor</code></strong> during
+the build process.</p>
+
+<p>All of the files copied to <strong><code>public/vendor</code></strong> are licensed and distributed under
+one or more of the following licenses:
+<a href="http://www.opensource.org/licenses/BSD-2-Clause">Simplified BSD</a>,
+<a href="http://www.opensource.org/licenses/BSD-3-Clause">The BSD 3-Clause</a>,
+<a href="http://www.opensource.org/licenses/MIT">MIT</a>, or
+<a href="http://www.opensource.org/licenses/Apache-2.0">Apache 2.0</a>.</p>
+
+<h3 id="src">src/</h3>
+
+<p>The <strong><a href="https://github.com/concord-consortium/lab/tree/master/src">src/</a></strong> directory
+contains the main source code for the Lab framework, examples, and documentation. This
+code is either copied directly or used to generate resources  that are copied.</p>
+
+<h4 id="srclab">src/lab/</h4>
+
+<p>The <strong>[src/lab](https://github.com/concord-consortium/lab/tree/master/src/lab)</strong>
+directory includes JavaScript source code for the Lab JavaScript modules.
+During the build process individual files are copied into modules which are placed in
+the <strong><code>public/lab</code></strong> directory.</p>
+
+<h5 id="srclabmd2d">src/lab/md2d</h5>
+
+<p>The <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/md2d">md2d</a> model-type contains a basic
+<em>*Next Generation Molecular Workbench</em> application. It built using a hybrid of a MVC design pattern
+with a dataflow architecture necessary for performance and consist of following units:</p>
+
+<ul>
+  <li>Models - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/md2d/models"><code>src/lab/md2d/models</code></a></li>
+  <li>Views - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/md2d/views"><code>src/lab/md2d/views</code></a></li>
+  <li>Controllers - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/md2d/controllers"><code>src/lab/md2d/controllers</code></a></li>
+</ul>
+
+<p>The source code of the core molecular dynamics engine is currently located in the
+<a href="https://github.com/concord-consortium/lab/tree/master/src/lab/md2d/models/engine">src/lab/md2d/models/engine</a>
+directory, which is organized as a set of related RequireJS modules. These modules are compatible
+both with the Web browser environment and Node.</p>
+
+<h6 id="md2d-headless-mode">MD2D Headless Mode</h6>
+
+<h6 id="node-binrun-md2dhttpsgithubcomconcord-consortiumlabblobmasternode-binrun-md2d"><a href="https://github.com/concord-consortium/lab/blob/master/node-bin/run-md2d"><code>node-bin/run-md2d</code></a></h6>
+
+<p>There is one working script for now:
+<a href="https://github.com/concord-consortium/lab/blob/master/node-bin/run-md2d"><code>node-bin/run-md2d</code></a></p>
+
+<p>It runs simulation for desired time and prints Time, Kinetic Energy, Total Energy every tick.</p>
+
+<p>Usage:</p>
+
+<pre><code>./node-bin/run-md2d -i [path] -o [path or stdout] -i [num]
+
+Options:
+  -i, --input   Model JSON file        [string]  [required]
+  -o, --output  Output file or stdout  [string]  [default: "stdout"]
+  -t, --time    Integration time       [default: 100]
+</code></pre>
+
+<p>Example results:</p>
+
+<pre><code>Model file: public/imports/legacy-mw-content/converted/new-examples-for-nextgen/simple-gas$0.json
+Output: stdout
+Integration time: 150
+time    KE      TE
+0       3.0988  3.1003
+50      3.1748  3.1011
+100     3.1748  3.0998
+150     3.1868  3.0986
+</code></pre>
+
+<h6 id="writing-new-scripts">Writing new scripts</h6>
+
+<p>In addition, new Node-based executables can be written. These are expected to be useful for verifying and tuning the model by running the model headless and saving summary results into a file for offline analysis.</p>
+
+<p>If you want to create your own script running simulation in headless mode, the most reasonable solution is to use <a href="https://github.com/concord-
+consortium/lab/blob/master/src/lab/md2d/models/modeler.js"><code>src/lab/md2d/models/modeler.js</code></a> as it provides high level API and
+allows to load model description using JSON file. To run simulation use the <code>tick()</code> method.</p>
+
+<p><a href="https://http://requirejs.org/">RequireJS</a> package must be correctly configured and used to load this module (see <a href="#javascript-dependency-management-and-build-process---requrejs">the section about
+RequireJS</a>). It also depends on <a href="http://jquery.com/">jQuery</a> and <a href="http://mbostock.github.com/d3/">d3.js</a> libraries.</p>
+
+<p>Fortunately, you do not have to think about this configuration each time. There is prepared the entry point for external Node.js applications:</p>
+
+<p><a href="https://github.com/concord-consortium/lab/blob/master/src/helpers/md2d/md2d-node-api.js"><code>src/helpers/md2d/md2d-node-api.js</code></a></p>
+
+<p>This module configures RequireJS loader, environment (D3, jQuery) and exports MD2D Node API using Node.js/CommonJS approach.</p>
+
+<p>Usage:</p>
+
+<pre><code>var md2dAPI = require("../src/helpers/md2d/md2d-node-api");
+// (...)
+// To create e.g. Modeler mentioned above:
+var model = md2dAPI.Modeler(properties);
+</code></pre>
+
+<p>If you need to use something what is not included in this API, you can:</p>
+
+<ul>
+  <li>Extend API defined in <a href="https://github.com/concord-consortium/lab/blob/master/src/helpers/md2d/md2d-node-api.js"><code>md2d-node-api.js</code></a>. It should easy to do it looking at the existing code.</li>
+  <li>Configure RequireJS yourself and use it to load module. Again, take a look at <a href="https://github.com/concord-consortium/lab/blob/master/src/helpers/md2d/md2d-node-api.js"><code>md2d-node-api.js</code></a> how to do it.</li>
+</ul>
+
+<p>There is a chance that existing RequireJS config won’t be sufficient (e.g. if you wan’t to use dynamic cs files loading).</p>
+
+<ul>
+  <li>
+    <p>The official, complete documentation:</p>
+
+    <p><a href="http://requirejs.org/docs/api.html#config">http://requirejs.org/docs/api.html#config</a></p>
+  </li>
+  <li>
+    <p>RequireJS config for tests, as they also use similar approach:</p>
+
+    <p><a href="https://github.com/concord-consortium/lab/blob/master/test/requirejs-config.js"><code>test/requirejs-config.js</code></a></p>
+  </li>
+</ul>
+
+<p>Hashbang scripts for starting these executables (i.e., files which start with the line
+<code>#!/usr/bin/env node</code> and which have the execute bit set) should be placed in the directory
+<a href="https://github.com/concord-consortium/lab/tree/master/node-bin"><code>node-bin</code></a>. Lab’s
+<a href="https://github.com/concord-consortium/lab/blob/master/package.json"><code>packages.json</code></a> file
+specifies <a href="https://github.com/concord-consortium/lab/tree/master/node-bin"><code>node-bin</code></a> as the
+location of the executable scripts which <code>npm</code> should make available whenever Lab is imported into
+another project as a Node module. (For developer convenience, <code>bin/</code> is being reserved for Ruby
+executables made available via Bundler.)</p>
+
+<h6 id="md2d-simulation-stepping">MD2D simulation stepping</h6>
+
+<p>Main parameters which define speed and accuracy of simulation in MD2D are:</p>
+
+<ul>
+  <li>timeStep,</li>
+  <li>timeStepsPerTick,</li>
+  <li>modelSampleRate.</li>
+</ul>
+
+<p>To explain them let’s start from the definition of the model “tick”. One “tick” consists of:</p>
+
+<ul>
+  <li>running simulation for <strong>timeStepsPerTick</strong> * <strong>timeStep</strong> femtoseconds,</li>
+  <li>update of the view.</li>
+</ul>
+
+<p>The “tick” is constantly repeated while simulation is running.</p>
+
+<p>So, when timeStepsPerTick= 50 and timeStep = 1fs, one “tick” causes that the engine performs calculations for 50fs.</p>
+
+<p><strong>timeStep</strong> defines a time value used during the one integration step in the engine internals. It affects accuracy of calculations.
+<strong>timeStepsPerTick</strong> in fact defines number of these integration steps during one “tick”. It is defined because it makes no sense to refresh view too often.</p>
+
+<p>Using pseudo-code we can say that tick is:</p>
+
+<pre><code>for (i = 0 to timeStepsPerTick) {
+   engine.advanceBy(timeStep)
+}
+view.update()
+</code></pre>
+
+<p>That’s why timeStepsPerTick = 50 and timeStep = 1fs is different from timeStepsPerTick = 25 and timeStep = 2fs.
+First one will be more accurate and two times slower (more or less) than second one, however both configurations will cause that one “tick” advance model by 50fs (25 * 2fs or 50 * 1fs).</p>
+
+<p><strong>modelSampleRate</strong> defines how often we should execute “tick”. Of course, in most cases we should call it as often as it’s possible and that’s the default behavior (with upper limit of 60 times per second to avoid running simple models too fast).</p>
+
+<p>You can test how these parameters work using the
+<a href="interactives.html#interactives/basic-examples/sample-rate-and-refresh-rate.json">Model integration time step, period, and sample rate</a>
+interactive.</p>
+
+<h5 id="srclabsolar-system">src/lab/solar-system/</h5>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/solar-system">src/lab/solar-system</a></li>
+</ul>
+
+<h5 id="srclabsignal-generator">src/lab/signal-generator/</h5>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/signal-generator">src/lab/signal-generator</a></li>
+</ul>
+
+<h5 id="srclabsensor">src/lab/sensor/</h5>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/sensor">src/lab/sensor</a></li>
+</ul>
+
+<h5 id="srclabgrapher">src/lab/grapher/</h5>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/grapher">src/lab/grapher</a></li>
+</ul>
+
+<h5 id="srclabcommon">src/lab/common/</h5>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/common">src/lab/common</a></li>
+</ul>
+
+<h5 id="srclabimport-export">src/lab/import-export/</h5>
+
+<ul>
+  <li><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/import-export">src/lab/import-export</a></li>
+</ul>
+
+<h5 id="srclabenergy2d">src/lab/energy2d/</h5>
+
+<p>The <strong><a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d">src/lab/energy2d</a></strong> model-type contains
+a basic <em>*Energy2D</em> application*. It is a direct port of <a href="http://energy.concord.org/energy2d/">Java Energy2D</a>.
+Energy2D is also built over MVC design pattern and consist of following units:</p>
+
+<ul>
+  <li>Models - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/models"><code>src/lab/energy2d/models</code></a></li>
+  <li>Views - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/views"><code>src/lab/energy2d/views</code></a></li>
+  <li>Controllers - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/controllers"><code>src/lab/energy2d/controllers</code></a></li>
+</ul>
+
+<p>and additionally:</p>
+
+<ul>
+  <li>Internal Utils - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/utils"><code>src/lab/energy2d/utils</code></a></li>
+  <li>GPU Toolkit - <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/gpu"><code>src/lab/energy2d/gpu</code></a></li>
+</ul>
+
+<p>GPU Toolkit is a small set of utilities which wraps basic WebGL structures and objects, providing
+higher level API. It is useful, as Energy2D uses WebGL for General-Purpose Computing on
+Graphics Processing Unit. So, a lot of physics calculations are performed on the GPU if user’s Web
+browser supports WebGL technology.</p>
+
+<p>The source code of the core physics engine is located in the <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/models"><code>src/lab/energy2d/models</code></a> directory.
+Especially important units are listed below:</p>
+
+<ul>
+  <li>Core Model <a href="https://github.com/concord-consortium/lab/blob/master/src/lab/energy2d/models/core-model.js"><code>src/lab/energy2d/models/core-model.js</code></a> - constructs all physics solvers,
+stores simulation data (arrays, textures) and delegates physics calculations to proper objects.</li>
+  <li>Physics Solvers <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/models/physics-solvers"><code>src/lab/energy2d/models/physics-solvers</code></a> - directory containing sequential
+(plain JavaScritp) implementation of physics algorithms used by core model.</li>
+  <li>Physics Solvers GPU <a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d/models/physics-solvers-gpu"><code>src/lab/energy2d/models/physics-solvers-gpu</code></a> - directory containing parallel
+implementation (WebGL-based) of heat and fluid solvers.</li>
+</ul>
+
+<p>Necessary GLSL (GL Shading Language) sources are stored in separate files. They are loaded using
+RequireJS <em>text</em> plug-in which just allows to load plain text files. Finally, they are inlined in
+the resulting library due to the RequireJS optimization process.</p>
+
+<h4 id="srcexamples-srcdoc-and-srcexperiments">src/examples/, src/doc/, and src/experiments/</h4>
+
+<p>The
+<strong><a href="https://github.com/concord-consortium/lab/tree/master/src/examples">src/examples/</a></strong>,
+<strong><a href="https://github.com/concord-consortium/lab/tree/master/src/doc">src/doc</a></strong> and,
+<strong><a href="https://github.com/concord-consortium/lab/tree/master/src/experiments">src/exoperments</a></strong>
+directories contain additional resources for generating the html, css, and image resources
+for the matching target folders in <strong><code>public</code></strong>.</p>
+
+<p><strong>Note:</strong> remember to make changes you want saved in the <strong><code>src/examples/</code></strong>, <strong><code>src/doc/</code></strong>,
+and <strong><code>src/experiments/</code></strong> and not in the target directories of the same names in
+<strong><code>public</code></strong>. Change made in <strong><code>public</code></strong> will be overwritten during the next
+build process.</p>
+
+<h4 id="srcresources">src/resources</h4>
+
+<p>The <strong><a href="https://github.com/concord-consortium/lab/tree/master/src/resources">src/resources/</a></strong> directory contains image resources and are copied directly to
+<strong><code>public/resources</code></strong>.</p>
+
+<h4 id="srcjnlp">src/jnlp</h4>
+
+<p>The <strong><a href="https://github.com/concord-consortium/lab/tree/master/src/jnlp">src/jnlp/</a></strong> directory currently contains a
+<a href="https://github.com/concord-consortium/lab/blob/master/src/jnlp/jnlps/org/concord/modeler/mw__V1.0.jnlp">template Java web Start JNLP for Molecular Workbench</a>
+and (DetectionApplet.class](https://github.com/concord-consortium/lab/blob/master/src/jnlp/org/concord/sensor/applet/DetectionApplet.class)
+a tiny Java class for quickly detecting whether Java applets can be run.</p>
+
+<p>The source code for DetectionApplet is in another repository located here:
+<a href="https://github.com/concord-consortium/sensor-applets/tree/master/src/main/java/org/concord/sensor/applet/DetectionApplet.java">DetectionApplet.java</a></p>
+
+<h4 id="srcsass">src/sass</h4>
+
+<p>The <strong><a href="https://github.com/concord-consortium/lab/tree/master/src/sass">src/sass/</a></strong> directory contains Sass templates and the Bourbon Sass library are are used
+during the build process to generate CSS resources.</p>
+
+<h4 id="srchelpers">src/helpers</h4>
+
+<p>The <strong><a href="https://github.com/concord-consortium/lab/tree/master/src/helpers">src/helpers/</a></strong> directory contains
+CoffeeScript and JavaScript modules as well as Ruby programs only used as part of the testing and
+build process and are not copied to <strong><code>public/resources</code></strong>.</p>
+
+<h3 id="javascript-dependency-management-and-build-process---requrejs">JavaScript Dependency Management and Build Process - RequreJS</h3>
+
+<p>Lab’s modules use <a href="http://requirejs.org/">RequireJS</a> for dependency management. It is a JavaScript
+file and module loader optimized for in-browser use, but it can be used in other JavaScript
+environments, like Rhino and Node. So, you don’t have to worry about manual JavaScript files
+concatenation and the library build process - everything is done automatically.</p>
+
+<p><a href="http://requirejs.org/">RequireJS</a> might be used for fully asynchronous in-browser module loading,
+but it can also be used for combining all source files into one output JavaScript file. The Lab
+project mostly uses the second approach. The tool which resolves all dependencies and combines them
+into single output file is called <strong>RequireJS Optimizer</strong>.</p>
+
+<p>Useful RequireJS resources:</p>
+
+<ul>
+  <li><a href="http://requirejs.org/docs/start.html">How to get started with RequireJS</a></li>
+  <li><a href="http://requirejs.org/docs/api.html">RequireJS API</a></li>
+  <li><a href="http://requirejs.org/docs/optimization.html">RequireJS Optimization</a></li>
+  <li><a href="http://requirejs.org/docs/node.html">RequireJS in Node</a></li>
+  <li><a href="https://groups.google.com/forum/?fromgroups#!forum/requirejs">RequireJS Google Group</a></li>
+</ul>
+
+<h4 id="adding-new-source-file-intended-to-work-in-the-web-browser">Adding new source file intended to work in the Web browser</h4>
+
+<p>Adding a new source to existing module is straightforward.</p>
+
+<ol>
+  <li>
+    <p>Put the source file in an appropriate directory (e.g. <code>src/lab/module-name/</code>).</p>
+  </li>
+  <li>
+    <p>Define it as a module using RequireJS syntax, e.g. following this pattern:</p>
+
+    <pre><code> define(function (require) {
+   // Dependencies.
+   var utils = require('other-module-name/file-name');
+   // Preparation code.
+   // (...)
+   // Finally, return module API.
+   return {
+     // (...)
+   };
+   // Or just constructor function:
+   // return function ClassName() {
+   //   (...)
+   // };
+ });
+</code></pre>
+
+    <p>You can read more about RequireJS modules syntax
+ <a href="http://requirejs.org/docs/api.html#define">here</a>.</p>
+  </li>
+  <li>
+    <p>In case of need, reference this file in other sources using RequireJS syntax:</p>
+
+    <pre><code>   var dependency = require('module-name/file-name');
+</code></pre>
+  </li>
+</ol>
+
+<p>That’s all! Your file will be automatically included during module build process.</p>
+
+<h4 id="adding-new-source-file-intended-to-work-in-the-web-browser-and-in-node">Adding new source file intended to work in the Web browser and in Node</h4>
+
+<p>If you are working on file which should also work in the Node environment as a typical package
+(without using RequireJS as a dependency and its syntax), follow instructions above and
+additionally:</p>
+
+<ol>
+  <li>
+    <p>Add following snippet at the beginning of the source file:</p>
+
+    <pre><code> if (typeof define !== 'function') { var define = require('amdefine')(module) }
+</code></pre>
+  </li>
+  <li>
+    <p>Make sure that <code>amdefine</code> package is listed as a dependency in your <code>package.json</code> file (it can be
+Lab’s <a href="https://github.com/concord-consortium/lab/blob/master/package.json"><code>packages.json</code></a> file
+or separate one if you work on the independent module, like those stored in
+<a href="https://github.com/concord-consortium/lab/tree/master/src/modules"><code>src/modules</code></a> directory).</p>
+  </li>
+</ol>
+
+<p>The Lab’s <strong>array</strong> module uses this technique, so you may look for a reference in
+<a href="https://github.com/concord-consortium/lab/tree/master/src/modules/arrays"><code>src/modules/arrays</code></a>.</p>
+
+<h4 id="adding-new-module-which-should-be-built-as-a-separate-library">Adding new module which should be built as a separate library</h4>
+
+<p>This involves a few additional steps comparing with adding a single source file.</p>
+
+<ol>
+  <li>Create a new directory in <code>src/lab</code>.</li>
+  <li>Put all related sources there or in <code>src/lab/common</code> (if you think that they are generic enough
+and may be reused by other modules).</li>
+  <li>Define <code>module-name.build.js</code> and <code>public-api.js</code> files in your new directory (described below).</li>
+  <li>
+    <p>Add build routines to the <a href="https://github.com/concord-consortium/lab/blob/master/Makefile"><code>Makefile</code></a>:</p>
+
+    <p>4.1. Define a new target, for example:</p>
+
+    <pre><code> public/lab/lab.module-name.js: \
+     $(NEW_MODULE_SRC_FILES) \
+     $(COMMON_SRC_FILES)
+     $(R_OPTIMIZER) -o src/lab/module-name/module-name.build.js
+</code></pre>
+
+    <p>4.2. List this target in <code>LAB_JS_FILES</code> Makefile variable containing the list of all Lab JavaScript
+   modules to be generated.</p>
+  </li>
+</ol>
+
+<p>Your module will be built during Lab’s build process. You may use one of the existing modules for
+reference in case of any troubles
+(<a href="https://github.com/concord-consortium/lab/tree/master/src/lab/md2d"><code>md2d</code></a>,
+<a href="https://github.com/concord-consortium/lab/tree/master/src/lab/energy2d"><code>energy2d</code></a> or
+<a href="https://github.com/concord-consortium/lab/tree/master/src/lab/grapher"><code>grapher</code></a>).</p>
+
+<h4 id="module-build-configuration---buildjs-file">Module Build Configuration - *.build.js file</h4>
+
+<p>Each Lab’s module contains file <code>name.build.js</code>. It is a RequireJS Optimizer build profile. Useful,
+related resources:</p>
+
+<ul>
+  <li><a href="http://requirejs.org/docs/optimization.html#wholeproject">RequireJS Build Profile Help</a></li>
+  <li><a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js">Example Build File with All Options
+Documented</a></li>
+</ul>
+
+<p><strong>If you create new build file, make sure that you use one of the existing build profiles as a
+reference!</strong> It will enforce consistent style and options across all Lab’s modules.</p>
+
+<p>Lab’s build profiles use <a href="https://github.com/jrburke/almond">almond</a> module - a replacement AMD
+loader for RequireJS. It is a smaller “shim” loader, providing the minimal AMD API footprint that
+includes loader plugin support.</p>
+
+<p>Why? <a href="https://github.com/jrburke/almond">almond</a> allows us to create the resulting library which is
+totally independent from RequireJS. It is a reasonable approach as RequireJS is used only for module
+definition, dependency resolving and building a single file library using Optimizer. The
+asynchronous module loading is not utilized by the final Lab library, so there is no need to force
+users to load whole RequireJS library. Instead, use and include minimalistic RequireJS API
+replacement.</p>
+
+<h4 id="module-public-api---public-apijs-file">Module Public API - public-api.js file</h4>
+
+<p>If module exposes API using global variables, it should define it in <code>public-api.js</code> file. It is
+a typical RequireJS module, which just adds properties to <code>window</code> object. You can look at
+<a href="https://github.com/concord-consortium/lab/blob/master/src/lab/md2d/public-api.js"><code>src/md2d/public-api.js</code></a>,
+<a href="https://github.com/concord-consortium/lab/blob/master/src/lab/energy2d/public-api.js"><code>src/energy2d/public-api.js</code></a>
+or <a href="https://github.com/concord-consortium/lab/blob/master/src/lab/grapher/public-api.js"><code>src/grapher/public-api.js</code></a>
+file for a reference.</p>
+
+<p>This files are <strong>not necessary</strong>, but <strong>highly recommended</strong> if module has to define some global
+variables. It is a convention used internally by Lab repository. Such files are enforcing clean
+definition of public API exposed by modules. Developers will have certainty that all global
+variables are defined <strong>there and only there</strong>.</p>
+
+<p>Execution of this script should be enforced by build profile (*.build.js files described above).
+Most often is done by <code>wrap</code> option:</p>
+
+<pre><code>  // Protect global namespace and call Public API export.
+  wrap: {
+    start: "(function() {",
+    // Almond by default simulates async call of require (sets timeout).
+    // Last argument (true) forces sync call instead.
+    end: "require(['module-name/public-api'], undefined, undefined, true); }());"
+  }
+</code></pre>
+
+<h4 id="coffeescript-files-support">CoffeeScript Files Support</h4>
+
+<p>The Lab project is configured to easily support CoffeeScript sources. RequireJS plugin called
+<strong>require-cs</strong> is used for dynamic loading of CoffeeScript sources.</p>
+
+<p>To enable CoffeeScript support, make sure that module’s build profile (see section about *.build.js
+files) contains following options:</p>
+
+<pre><code>// Additional modules.
+paths: {
+'cs' :'../vendor/require-cs/cs',
+'coffee-script': '../vendor/coffee-script/extras/coffee-script'
+},
+//Stub out the cs module after a build since
+//it will not be needed.
+stubModules: ['cs'],
+// The optimization will load CoffeeScript to convert
+// the CoffeeScript files to plain JS. Use the exclude
+// directive so that the coffee-script module is not included
+// in the built file.
+exclude: ['coffee-script']
+</code></pre>
+
+<p><code>md2d</code> module has CoffeeScript support enabled, so you can use
+<a href="https://github.com/concord-consortium/lab/blob/master/src/lab/md2d/md2d.build.js">its build profile</a>
+as a reference.</p>
+
+<ul>
+  <li>
+    <p>To define a CoffeeScript module just use typical RequireJS syntax converted to CoffeeScript:</p>
+
+    <pre><code>  define (require) -&gt;
+    # Dependencies.
+    CoffeeScriptDependency = require 'cs!other-module-name/file-name'
+    JavaScriptDependency   = require 'module-name/file-name'
+
+    class SomeClass extends BaseClass
+    // (...)
+</code></pre>
+  </li>
+  <li>
+    <p>You can also load CoffeeScript in JavaScript files:</p>
+
+    <pre><code>  define(function (require) {
+    // Dependencies.
+    var CoffeeScriptDependency = require('cs!module-name/file-name');
+    // (...)
+</code></pre>
+  </li>
+</ul>
+
+<p>Just remember about <strong>cs!</strong> prefix in paths when loading CoffeeScript sources. RequireJS Optimizer
+will convert such files to plain JavaScript and include them in the final library.</p>
+
+<h3 id="generated-examples-publicexamples">Generated Examples: <code>public/examples/</code></h3>
+
+<p>The <code>public/examples/</code> directory is automatically generated running <code>make</code> and is not part of the repository.</p>
+
+<p>When <code>bin/guard</code> is running any changes to files in the <code>src/examples/</code> directory cause automatic rebuilding
+of the associated files in the <code>public/examples/</code> directory.</p>
+
+<h3 id="html-and-css-generation">HTML and CSS Generation</h3>
+
+<p><a href="http://haml-lang.com/">Haml</a> is used to generate most of the HTML in the <code>public/</code> directory.</p>
+
+<p><a href="http://kramdown.rubyforge.org/">kramdown</a> is used to generate <code>readme.html</code> in <code>public/</code> from Mardown markup.</p>
+
+<p><a href="http://sass-lang.com/">Sass</a> is used to generate the CSS assets. The Sass markup may be in the form of
+<code>*.sass</code> or <code>*.scss</code> files</p>
+
+<p>The <a href="http://thoughtbot.com/bourbon/">Bourbon</a> library of Sass mixins is included.</p>
+
+<ul>
+  <li><a href="http://thoughtbot.com/bourbon/">Bourbon documentation</a></li>
+  <li><a href="http://asciicasts.com/episodes/330-better-sass-with-bourbon">ASCIIcast 330: Better SASS With Bourbon</a></li>
+  <li><a href="http://robots.thoughtbot.com/post/7846399901/introducing-bourbon-sass-mixins">Introducing Bourbon Sass Mixins</a></li>
+</ul>
+
+<h2 id="testing-test">Testing: <code>test/</code></h2>
+
+<p>Lab’s JavaScript tests use <a href="http://vowsjs.org">Vows</a>, an asynchronous behavior driven framework based
+on <a href="http://nodejs.org/">Node.js</a>. In addition Lab uses <a href="https://github.com/tmpvar/jsdom">jsdom</a>, a
+lightweight CommonJS implementation of the W3C DOM specifications. Lab’s test setup was inspired
+by that used by <a href="http://mbostock.github.com/d3/">d3.js</a>. The development dependencies for running the
+tests are installed using <a href="http://npmjs.org/">npm</a>.</p>
+
+<p>Running the tests:</p>
+
+<pre><code>$ make test
+................................. . . .. . . .
+x OK &gt; 40 honored (0.012s)
+</code></pre>
+
+<p>If you are running <code>bin/guard</code> the tests run automatically anytime a change is made in the JavaScript
+files in the <code>src/</code> or <code>test/</code> directory.</p>
+
+<p>The results of the tests are displayed in the console that <code>bin/guard</code> is running in.</p>
+
+<p>If the bottom of the console window is viewable you will see new test results whenever you save a changes.</p>
+
+<p>Recent versions of nodejs/v8 support TypedArrays – this make it possible to more extensively
+test lab.arrays which is designed to support using either typed or regular arrays for computation.</p>
+
+<p><code>test/env.js</code> uses the node module <a href="https://github.com/tmpvar/jsdom">jsdom</a> to setup resources for
+simple emulation of a browser.</p>
+
+<p><a href="http://vowsjs.org">Vows</a> integrates the <a href="http://nodejs.org/docs/latest/api/assert.html">standard nodejs assertions</a>
+with an additional collection of useful <a href="http://vowsjs.org/#assertions">assertions</a> summarized below:</p>
+
+<ul>
+  <li>
+    <p>numerical</p>
+
+    <pre><code>  assert.greater (3, 2);
+  assert.lesser (2, 3);
+  assert.inDelta (Math.random(), 0, 1);
+</code></pre>
+  </li>
+  <li>
+    <p>equality</p>
+
+    <pre><code>  assert.equal          (4, 4);
+  assert.strictEqual    (4 &gt; 2, true);
+  assert.notEqual       (4, 2);
+  assert.strictNotEqual (1, true);
+  assert.deepEqual      ([4, 2], [4, 2]);
+  assert.notDeepEqual   ([4, 2], [2, 4]);
+</code></pre>
+  </li>
+  <li>
+    <p>type</p>
+
+    <pre><code>  assert.isFunction (function () {});
+  assert.isObject   ({goo:true});
+  assert.isString   ('goo');
+  assert.isArray    ([4, 2]);
+  assert.isNumber   (42);
+  assert.isBoolean  (true);
+  assert.typeOf     (42, 'number');
+  assert.instanceOf ([], Array);
+</code></pre>
+  </li>
+  <li>
+    <p>truth</p>
+
+    <pre><code>  assert.isTrue  (true);
+  assert.isFalse (false);
+</code></pre>
+  </li>
+  <li>
+    <p>null, undefined, NaN</p>
+
+    <pre><code>  assert.isNull      (null);
+  assert.isNotNull   (undefined);
+  assert.isUndefined ('goo'[9]);
+  assert.isNaN       (0/0);
+</code></pre>
+  </li>
+  <li>
+    <p>inclusion</p>
+
+    <pre><code>  assert.include ([4, 2, 0], 2);
+  assert.include ({goo:true}, 'goo');
+  assert.include ('goo', 'o');
+</code></pre>
+  </li>
+  <li>
+    <p>regexp matching</p>
+
+    <pre><code>  assert.match ('hello', /^[a-z]+/);
+</code></pre>
+  </li>
+  <li>
+    <p>length</p>
+
+    <pre><code>  assert.length ([4, 2, 0], 3);
+  assert.length ('goo', 3);  *** not working ***
+</code></pre>
+  </li>
+  <li>
+    <p>emptiness</p>
+
+    <pre><code>  assert.isEmpty ([]);
+  assert.isEmpty ({});
+  assert.isEmpty ("");
+</code></pre>
+  </li>
+  <li>
+    <p>exceptions</p>
+
+    <pre><code>  assert.throws(function () { x + x }, ReferenceError);
+  assert.doesNotThrow(function () { 1 + 1 }, Error);
+</code></pre>
+  </li>
+</ul>
+
+<p>Additionally <code>test/env-assert.js</code> has a number of useful additional assertions copied from
+<a href="http://mbostock.github.com/d3/">d3.js</a>.</p>
+
+<p><em><strong>Note</strong>: Using a more specific assertion usually results in more useful error reports.</em></p>
+
+<p>There are also many interesting test examples and patterns in the
+<a href="https://github.com/mbostock/d3/tree/master/test">d3.js test directory</a> that can be adapted for use in Lab.</p>
+
+<h3 id="a-simple-example-of-test-driven-development">A Simple Example of Test Driven Development</h3>
+
+<p>Here’s a simple example that is part of the tests for <code>lab.arrays.js</code> to test the <code>arrays.max()</code> function:</p>
+
+<pre><code>"find max in array with negative and positive numbers": function(max) {
+  assert.equal(max([3, -1, 0, 1, 2, 3]), 3);
+},
+</code></pre>
+
+<p>The ‘model stepping’ tests are a good example where the tests help helped drive new features. The basic
+features I was testing in this section relate to the existing functionality exposed by the Stop, Start, Go, and
+Reset buttons as wells as the extended keyboard controls that allow stepping forward and backwards a step at a time.</p>
+
+<p>First I created this test that passed:</p>
+
+<pre><code>"after running running one tick the model is at step 1": function(model) {
+  model.tick();
+  assert.equal(model.stepCounter(), 1);
+  assert.isTrue(model.isNewStep());
+},
+</code></pre>
+
+<p>In thinking about driving out changes to KE, PE and Temperature of the molecular model itself I realized
+I’d like the capability to run a specific number of steps forward and then check the results.</p>
+
+<p>I then wrote this test that failed – because the model.tick() function didn’t yet take an optional argument to
+run multiple steps forward:</p>
+
+<pre><code>"after running 9 more ticks the model is at step 10": function(model) {
+  model.tick(9);
+  assert.equal(model.stepCounter(), 10);
+  assert.isTrue(model.isNewStep());
+},
+</code></pre>
+
+<p>After saving the change I saw the new test failure reported in my console. I then implemented the new
+feature in the actual <code>src/lab/molecules.js</code>. Less than a second after saving the file the tests
+completed and the report showed it passing.</p>
+
+<p>This is a very simple example – but part of the value of this kind of test driven development is in first
+thinking of how something should behave rather than in how to get it to actually do the work.</p>
+
+<p>Since I already had this function for running one model step:</p>
+
+<pre><code>model.tick()
+</code></pre>
+
+<p>Adding an optional numeric argument for running more steps is a fine way to express the intent of the new feature:</p>
+
+<pre><code>model.tick(9)
+</code></pre>
+
+<p>In more complicated coding thinking about how to express the intent clearly and then what the result
+should be if that intent is successful <strong>FIRST</strong> … and then ‘driving out’ the actual implementation to
+achieve that result can result in a better architecture – and of course you also end up with tests.</p>
+
+<p>Because the tests run SO quickly I can interactively change the code in the module or the test and
+immediately see results.</p>
+
+<h3 id="debugging-tests-using-the-node-debugger">Debugging Tests using the node debugger</h3>
+
+<p>Sometimes it can be helpful to break into a debugger when there is a problem in either the code
+or the test setup itself. Node comes with a <a href="http://nodejs.org/docs/latest/api/debugger.html">debugger</a>
+which can be used in combination with vows and the tests.</p>
+
+<p>First set a breakpoint by inserting the statement: <code>debugger;</code></p>
+
+<pre><code>suite.addBatch({
+  "Thermometer": {
+    topic: function() {
+      debugger;
+      return new components.Thermometer("#thermometer");
+    },
+    "creates thermometer": function(t) {
+      assert.equal(t.max, 0.7)
+    }
+  }
+});
+</code></pre>
+
+<p>Start the node debugger and pass in the full command line to run the tests:</p>
+
+<pre><code>node debug ./node_modules/vows/bin/vows --no-color
+</code></pre>
+
+<p>The debugger will break at the beginning of vows:</p>
+
+<pre><code>&lt; debugger listening on port 5858
+connecting... ok
+break in node_modules/vows/bin/vows:3
+  1
+  2
+  3 var path   = require('path'),
+  4     fs     = require('fs'),
+  5     util   = require('util'),
+</code></pre>
+
+<p>Enter <code>cont</code> to continue execution until your breakpoint.</p>
+
+<pre><code>debug&gt; cont
+&lt; ·
+&lt; ········
+&lt; ·
+&lt;
+break in test/lab/components/components-test.js:13
+ 11   "Thermometer": {
+ 12     topic: function() {
+ 13       debugger;
+ 14       return new components.Thermometer("#thermometer");
+ 15     },
+</code></pre>
+
+<p>To evaluate expressions type <code>repl</code>  – use ctrl-C to exit the repl:</p>
+
+<pre><code>repl
+Press Ctrl + C to leave debug repl
+&gt; initialization_options
+{ model_listener: false,
+  lennard_jones_forces: true,
+  coulomb_forces: true }
+&gt; atoms[0].charge
+-1
+</code></pre>
+
+<p>Enter <strong>ctrl-C</strong> to exit the repl and return to the debugger.</p>
+
+<p>Enter <strong>ctrl-D</strong> to exit the debugger.</p>
+
+<p><a href="https://github.com/dannycoates/node-inspector">node-inspector</a>
+<a href="http://search.npmjs.org/#/node-inspector">npm package for node-inspector</a></p>
+
+<h4 id="using-node-inspector-while-debugging">Using node-inspector while debugging</h4>
+
+<p><a href="https://npmjs.org/package/node-inspector">node-inspector</a> supports using the webkit inspector in Chrome to support
+interactive debugging in node. This can be particualrly help when debugging tests.</p>
+
+<p>Example:</p>
+
+<p>Add a debugger statement to your test:</p>
+
+<pre><code>originalModelJson = fs.readFileSync(testDir + "expected-json/" + modelJsonFile).toString();
+modelName = /\/?([^\/]*)\.json/.exec(modelJsonFile)[1];
+debugger;
+originalModel = JSON.parse(originalModelJson);
+model = new Model(originalModel);
+</code></pre>
+
+<p>Start a debugging session:</p>
+
+<pre><code>$ node --debug-brk ./node_modules/vows/bin/vows --no-color test/vows/mml-conversions/deserialize-serialize-test.js
+debugger listening on port 5858
+</code></pre>
+
+<p>Start node-inspector:</p>
+
+<pre><code>$ ./node_modules/.bin/node-inspector &amp;
+info  - socket.io started
+visit http://0.0.0.0:8080/debug?port=5858 to start debugging
+</code></pre>
+
+<h2 id="physical-constants-and-units">Physical constants and units</h2>
+
+<p>The core of the molecular dynamics engine performs computations using dimensioned quantities; we do
+not nondimensionalize to reduced units.  The units used internally are:</p>
+
+<ul>
+  <li>femtoseconds</li>
+  <li>nanometers</li>
+  <li>Dalton (atomic mass units)</li>
+  <li>elementary charges</li>
+  <li>Kelvin</li>
+</ul>
+
+<p>(Note that we will shortly switch to representing time in picoseconds rather than femtoseconds.)</p>
+
+<p>The above implies that the ‘natural’ unit of energy within the application is the “Dalton nm^2 /
+fs^2”, and the natural unit of force is the “Dalton nm / fs^2”. We call these “MW Energy Units” and
+“MW Force Units” respectively; however, externally-facing methods accept and report energies in
+electron volts, rather than “MW Units”.</p>
+
+<p>The molecular dynamics engine in <code>src/md-engine</code> contains a submodule, defined in <code>src/md-
+engine/constants/</code> which defines physical useful constants and allows one to perform some unit
+conversions in a mnemonic way.</p>
+
+<p>Once you have <code>require()</code>d the constants module appropriately, you can access the constants, 2
+converter methods, and an object that defines the various units. For the following, assume the
+<code>constants</code> module has been <code>require()</code>d into the variable <code>constants</code>.</p>
+
+<h3 id="units">Units</h3>
+
+<p>The various units are available as properties of the object <code>constants.unit</code>, and are named
+appropriately. The units themselves are objects, but their properties are not external API; rather,
+the unit objects are expected to be passed as arguments to conversion methods which return numeric
+values. Units are named in the singular and are written as all-uppercase (they are constants).</p>
+
+<p>Some example units are:</p>
+
+<ul>
+  <li><code>constants.unit.JOULE</code> constants.unit.MW_ENERGY_UNIT` (Dalton nm^2 / fs^2, see above)</li>
+  <li><code>constants.unit.METERS_PER_FARAD</code></li>
+</ul>
+
+<h3 id="physical-constants">Physical Constants</h3>
+
+<p>The various constants are defined as properties of the <code>constants</code> object. However, these do not
+have numerical values; instead, they each contain a single method, <code>as</code>, which accepts a unit (see
+above) and returns the numerical value of that constant in terms of that unit. This is intended to
+be a convenience for the programmer and to reduce the likelihood that he or she will forget to keep
+track of the units in which a value is stored.</p>
+
+<p>For example,</p>
+
+<ul>
+  <li><code>constants.BOLTZMANN_CONSTANT.as(constants.unit.JOULES_PER_KELVIN)</code> (== 1.380658e-23)</li>
+  <li><code>constants.PERMITTIVITY_OF_FREE_SPACE.as(constants.unit.FARADS_PER_METER)</code> (== 8.854187e-12)</li>
+</ul>
+
+<h3 id="unit-conversions">Unit conversions</h3>
+
+<p>The <code>constants</code> module does not attempt to do dimensional analysis (for example, converting kg m/s^2
+into Newtons). However, it can convert a value between two different units that measure the same
+type of quantity, and it can supply conversion ratios that make it easier to do dimensional analysis
+carefully in your own code.</p>
+
+<h4 id="converting-a-value-between-two-unit-types">Converting a value between two unit types:</h4>
+
+<p>To convert the value 1kg into Daltons (aka atomic mass units), use the <code>convert</code> method:</p>
+
+<p><code>constants.convert(1, { from: constants.unit.KILOGRAM, to: constants.unit.DALTON })</code> (==
+6.022137376997844e+26)</p>
+
+<h4 id="finding-the-ratio-between-two-unit-types-and-rolling-your-own-unit-conversions">Finding the ratio between two unit types and rolling your own unit conversions:</h4>
+
+<p>To find the number of atomic masses in 1 kg, use the <code>ratio</code> method with the <code>per</code> argument:</p>
+
+<p><code>constants.ratio(constants.unit.DALTON, { per: constants.unit.KILOGRAM })</code>
+(== 6.022137376997844e+26)</p>
+
+<p>This form of ratio is especially useful for unit conversion, and the “per” is intended as a
+mnemonic. The number reported above, for example, is easily understood to be “6.022 x 10^26 Dalton
+per kilogram” and can therefore be used as a factor that “cancels” kilograms and replaces them with
+Daltons in a compound unit such as “kg m/s”.</p>
+
+<p>However, sometimes you want the value of a Dalton expressed as kilograms. Although you <em>could</em>
+reverse the units in the above function call, or divide 1 by the result above, it is better to use
+the mnemonic <code>as</code> form of <code>ratio</code>:</p>
+
+<p><code>constants.ratio(constants.unit.DALTON, { as: constants.unit.KILOGRAM })</code> (== 1.66054e-27)</p>
+
+<h2 id="deployment">Deployment</h2>
+
+<h3 id="deploying-static-content-to-a-github-gh-pages-branch">Deploying static content to a Github gh-pages branch</h3>
+
+<p>Github’s <a href="http://pages.github.com/">github:pages</a> feature supports sharing any content in
+a <code>gh-pages</code> repository branch as static web content.</p>
+
+<p>The <a href="https://github.com/concord-consortium/lab/tree/gh-pages">gh-pages branch of the Lab repository</a>
+is used to store the static pages and client-side code built by the Makefile at the directory <code>public</code>.</p>
+
+<p><a href="http://concord-consortium.github.com/lab/">concord-consortium.github.com/lab</a></p>
+
+<p>In addition the content of the <code>gh-pages</code> branch is used to create the
+<a href="#distribution-of-project-and-examples">downloadable archive distributions of Lab</a></p>
+
+<p>The contents of the gh-pages branch are automatically made available in a standard
+web-page form (as opposed to the standard Github page for showing a repository) at this url:</p>
+
+<p><a href="http://concord-consortium.github.com/lab/">concord-consortium.github.com/lab</a></p>
+
+<p>when you push to the gh-pages branch.</p>
+
+<p>If you maintain a fork of this project on Github, you get a Github Page for free, and the
+instructions below apply to you as well!</p>
+
+<h4 id="making-the-public-folder-track-the-gh-pages-branch">Making the <code>public/</code> folder track the gh-pages branch</h4>
+
+<p>If you haven’t done this yet, make the <code>public</code> folder track the contents of the gh-pages branch.</p>
+
+<p><strong>If you have a <code>Guard</code> process running make sure and stop it before continuing!</strong></p>
+
+<pre><code># public/ needs to be empty for git clone to be happy:
+rm -rf public
+
+# substitute the URL for whatever fork of the Lab repository you have write access to:
+git clone git@github.com:concord-consortium/lab.git -b gh-pages public
+</code></pre>
+
+<p>Note that <code>make clean</code> now empties the <code>public</code> folder in-place, leaving the Git
+<code>public/.git</code> and <code>public/jnlp</code> directories intact.</p>
+
+<h4 id="pushing-changes-to-gh-pages-branch">Pushing changes to gh-pages branch</h4>
+
+<p>First, make sure your <code>public</code> folder tracks the gh-pages branch, as per the above.</p>
+
+<p>Then run the following shell command in the <code>script/</code> folder:</p>
+
+<pre><code>script/gh-pages
+</code></pre>
+
+<p>This script will first make sure there is nothing that isn’t committed. If
+there are unstaged or staged and uncommitted files the <code>gh-pages</code> script will halt.</p>
+
+<p>Test and commit (or save the changes to a topic branch) and if your testing show
+the bugs are fixed or the new features or examples are stable then push
+these changes to the master branch and try running the <code>gh-pages</code> script again:</p>
+
+<pre><code>git push origin master
+script/gh-pages
+</code></pre>
+
+<h3 id="deploying-to-a-remote-server">Deploying to a remote server</h3>
+
+<p>The Lab project has a suite of scripts for creating and deploying to EC2 servers running
+on Amazon Web services (AWS).</p>
+
+<p>The scripts for creating, stopping and re-creating a server require an AWS account. These scrpts use
+the Ruby proge</p>
+
+<p>The Capistrano scripts for updating a deployment to an existing server only require that you have a copy of
+the pem file associated</p>
+
+<p>To deploy to AWS you will need an AWS account and the ability to create and modify EC2 instances.</p>
+
+<p>If you are create a new server from scratch you will also need access to the AWS DNS service Route53.</p>
+
+<p><strong>Note: currently there are a few steps/resources that only work properly if you have a concord.org
+AWS account.</strong></p>
+
+<h4 id="aws-setupprerequisites">AWS Setup/Prerequisites</h4>
+
+<ol>
+  <li>AWS account. For deployment to the lab servers managed by CC you will need an AWS
+account managed by concord.org.</li>
+  <li>Create your AWS Access Key ID and AWS Secret Access Key. To do this, go to the IAM Dashboard in
+AWS (Services -&gt; IAM), click ‘Users’, click the checkbox by your username, and select User Actions -&gt;
+Manage Access Keys</li>
+  <li>
+    <p>Copy your AWS Access Key ID and AWS Secret Access Key to the following yaml configuration
+file <code>.fog</code> in your home directory:</p>
+
+    <pre><code>:default:
+  :aws_access_key_id: YOUR_AWS_ACCESS_KEY_ID
+  :aws_secret_access_key: YOUR_AWS_SECRET_ACCESS_KEY
+</code></pre>
+  </li>
+  <li>Place a copy of a the appropriate AWS PEM file on your local files system. For deployment
+to the lab servers managed by CC use the <code>lab-dev</code> pem. This can be found in CC’s Google Docs/Drive.
+This file should have its permissions set to 600, and the folder it is in (e.g. ~/.ec2) should be 700.</li>
+  <li>Create or identify an appropriate AWS security group. For deployment to the lab servers managed
+by CC the <code>lab.dev</code> security group is used.</li>
+  <li>
+    <p>Edit the <code>:deploy</code> section of <code>config/config.yml</code> using values in <code>config/config.sample.yml</code>
+as a guide.</p>
+
+    <p>Here’s an example from the <code>:deploy</code> section of a working <code>config.yml</code>:</p>
+
+    <pre><code>:deploy:
+  :targets:
+  - :name: lab-dev
+    :url: lab.dev.concord.org
+    :branch: master
+  :group_name: lab.dev
+  :zone_domain: concord.org.
+  :zone_records_name: dev.concord.org
+  :pem:
+    :name: lab-dev
+    :path: ~/.ec2
+</code></pre>
+
+    <p>There is one deploy target named <code>lab-dev</code> associated with a server running at <code>lab.dev.concord.org</code>.
+Deployments to <code>lab-dev</code> use the master branch of the repository. The <code>lab.dev</code> security group is
+used when new servers are created or existing sever are re-created.</p>
+
+    <p>When a whole new server is created the DNS entry is created in the <code>concord.org.</code> zone domain and
+when searching for an existing DNS entry for a <code>deploy-target</code> the zone record name <code>dev.concord.org</code>
+is used.</p>
+
+    <p>Besides the AWS Access Key ID and AWS Secret Access Key security credentials copyied locally to
+to the file <code>~/.fog</code> the <code>lab-dev.pem</code> file saved in the directory: <code>~/.ec2</code> is also used when
+communicating with AWS.</p>
+  </li>
+  <li>
+    <p>List the deploy targets described in <code>config/config.yml</code> with the task: <code>thor cloud:list_targets</code>
+to confirm the configuration is valid:</p>
+
+    <pre><code>$ thor cloud:list_targets
+
+  Deploy Targets
+  name                    url                           branch
+------------------------------------------------------------------------------------------
+  lab-dev                 lab.dev.concord.org           master
+</code></pre>
+  </li>
+  <li>
+    <p>Generate specific Capistrano deploy tasks and littlechef nodes using <code>deploy-targets</code>
+specified in <code>config/config.yml</code>. Run this <code>thor</code> task whenever you change the <code>:deploy</code>
+section in <code>config/config.yml</code> to generate the Ruby Capastrano configuration files in
+<code>config/deployment/&lt;deploy-target&gt;.rb</code> and the littlechef JSON configurations in
+<code>config/littlechef/nodes/&lt;deploy-target&gt;.json</code></p>
+
+    <pre><code>$ thor cloud:setup
+</code></pre>
+  </li>
+  <li>
+    <p>List the running AWS server instances to confirm that your local AWS security credentials
+are setup correctly:</p>
+
+    <pre><code>$ thor cloud:list
+
+  target              hostname                      state         ipaddress           ec2-id          ec2-dns
+------------------------------------------------------------------------------------------------------------------------------------------------------
+  lab-dev             lab.dev.concord.org.          running       107.22.184.173      i-f844ec81      ec2-107-22-184-173.compute-1.amazonaws.com
+</code></pre>
+  </li>
+  <li>
+    <p>If you are working with an existing host that has already been setup such as <code>lab.dev.concord.org</code>
+generate the proper ssh configuration and add the remote host key to <code>~/.ssh/known_hosts</code>.
+This adds a local <strong><code>ubuntu</code></strong> user in <code>~/ssh/config</code> and connects to the remote host to add the key.</p>
+
+    <p>Example of setting up SSH configuration with the existing remote AWS host: <code>lab..dev.concord.org</code>:</p>
+
+    <pre><code>$ thor cloud:setup_ssh lab.dev.concord.org
+</code></pre>
+  </li>
+</ol>
+
+<h3 id="using-capstrano-to-deploy-new-code-to-an-existing-server">Using Capstrano to deploy new code to an existing server</h3>
+
+<p>After testing, committing, and pushing code to a public repository use the Capistrano
+tasks to update a remote server.</p>
+
+<p>The capistrano commands take the form:</p>
+
+<pre><code>cap &lt;deploy-target&gt; task
+</code></pre>
+
+<p>The basic command to update a server:</p>
+
+<pre><code>cap &lt;deploy-target&gt; deploy:update
+</code></pre>
+
+<p>Here are the list of current Capistrano deploy commands:</p>
+
+<pre><code>$ cap -T deploy:
+cap deploy:restart          # restart rails app
+cap deploy:clean_and_update # clean and update server
+cap deploy:setup            # setup server
+cap deploy:status           # display last commit on deployed server
+cap deploy:update           # update server
+cap deploy:update_jnlps     # update public/jnlp dir on server
+</code></pre>
+
+<p>Update the <code>lab.dev.concord.org</code> server with the latest code committed on the master branch on
+<a href="https://github.com/concord-consortium/lab}">concord-consortium/lab</a>:</p>
+
+<pre><code>cap lab-dev deploy:update
+</code></pre>
+
+<p>When you have made changes in the repository like adding or updating a git submodule in
+<code>src/vendor</code> then you will need instead run the <code>deploy:clean_and_update</code> task:</p>
+
+<pre><code>cap lab-dev deploy:clean_and_update
+</code></pre>
+
+<h3 id="updating-the-java-jar-resources-on-a-remote-rerver">Updating the Java jar resources on a remote rerver</h3>
+
+<p>The Java resources require much less frequent updates since the main body of work
+for Lab is occuriring in the HTML5 development.</p>
+
+<p>The capistrano task: <code>deploy:update_jnlps</code> erases the <code>public/jnlp/</code>
+directory on the remote server and re-generates and deploy the packed signed
+jars from source or from downloads:</p>
+
+<pre><code>$ cap &lt;deploy-target&gt; deploy:update_jnlps
+</code></pre>
+
+<p>The resulting directory on the server will look something like this:</p>
+
+<pre><code>$ tree /var/www/app/public/jnlp/
+public/jnlp/
+├── jdom
+│   └── jdom
+│       ├── jdom__V1.0.jar
+│       └── jdom__V1.0.jar.pack.gz
+├── jug
+│   └── jug
+│       ├── jug__V1.1.2.jar
+│       └── jug__V1.1.2.jar.pack.gz
+└── org
+    └── concord
+        ├── data
+        │   ├── data__V0.2.0-20120531.005123-1.jar
+        │   └── data__V0.2.0-20120531.005123-1.jar.pack.gz
+        ├── energy2d
+        │   ├── energy2d__V0.1.0-20120531.005123-1.jar
+        │   └── energy2d__V0.1.0-20120531.005123-1.jar.pack.gz
+        ├── framework
+        │   ├── framework__V0.1.0-20120531.005123-1.jar
+        │   └── framework__V0.1.0-20120531.005123-1.jar.pack.gz
+        ├── frameworkview
+        │   ├── frameworkview__V0.1.0-20120531.005123-1.jar
+        │   └── frameworkview__V0.1.0-20120531.005123-1.jar.pack.gz
+        ├── modeler
+        │   ├── mw__V2.1.0-20120531.005123-1.jar
+        │   └── mw__V2.1.0-20120531.005123-1.jar.pack.gz
+        ├── otrunk
+        │   ├── otrunk__V0.3.0-20120531.005123-1.jar
+        │   └── otrunk__V0.3.0-20120531.005123-1.jar.pack.gz
+        ├── sensor
+        │   ├── sensor-applets
+        │   │   ├── sensor-applets__V0.1.0-20120531.005123-1.jar
+        │   │   └── sensor-applets__V0.1.0-20120531.005123-1.jar.pack.gz
+        │   ├── sensor__V0.2.0-20120531.005123-1.jar
+        │   ├── sensor__V0.2.0-20120531.005123-1.jar.pack.gz
+        │   └── vernier
+        │       └── vernier-goio
+        │           ├── vernier-goio-macosx-i386-nar__V1.5.0-20101012.203834-2.jar
+        │           ├── vernier-goio-macosx-ppc-nar__V1.5.0-20101012.203834-2.jar
+        │           ├── vernier-goio-macosx-x86_64-nar__V1.5.0-20101012.203835-2.jar
+        │           └── vernier-goio-win32-nar__V1.4.0.jar
+        └── sensor-native
+            ├── sensor-native__V0.1.0-20120531.005123-1.jar
+            └── sensor-native__V0.1.0-20120531.005123-1.jar.pack.gz
+</code></pre>
+
+<h3 id="managing-aws-servers-with-thor-tasks">Managing AWS servers with thor tasks</h3>
+
+<p>There are a set of <a href="#thor">thor</a> tasks for managing, creating, and re-creating AWS servers for Lab:</p>
+
+<pre><code>$ thor -T
+cloud
+-----
+thor cloud:create hostname                       # create a new server instance using this hostname
+thor cloud:delete hostname                       # delete an existing server instance running at this hostname
+thor cloud:find_dns_record hostname              # find dns record for hostname
+thor cloud:list                                  # list existing servers
+thor cloud:list_targets                          # list existing deploy targets
+thor cloud:recreate hostname                     # recreate a new server instance for this hostname by destroying and rebuilding an existing server
+thor cloud:setup                                 # setup capistrano deploy tasks and littlechef nodes using targets in config/config.yml
+thor cloud:setup_ssh hostname                    # setup ssh configuration for communication to hostname
+thor cloud:start ec2_id                          # start a stopped existing server instance using the ec2-id
+thor cloud:stop reference                        # stop a running existing server instance at this hostname or ec2-id
+thor cloud:update reference                      # update server &lt;ec2_id|hostname&gt; provisioning with littlechef 'lab-server' role
+thor cloud:update_dns_record hostname ipaddress  # updating IP address for DNS record hostname to ipaddress
+</code></pre>
+
+<h3 id="creating-a-new-aws-lab-server">Creating a new AWS Lab Server</h3>
+
+<p>Creating a new Lab server on AWS consists of three steps:</p>
+
+<ol>
+  <li>
+    <p>Creating a new hostname, server, and provisioning the server with thor:</p>
+
+    <pre><code> $ thor cloud:create &lt;hostname&gt;
+</code></pre>
+
+    <p>This task will create a new <strong>hostname</strong> as a DNS A record if the <strong>hostname</strong> does not already exists.</p>
+
+    <p>If the hostname already exists as a CNAME first login to the <a href="https://console.aws.amazon.com/route53/home">AWS:Route53</a>
+   service and delete the existing host name.</p>
+
+    <p>If the new DNS entry for <strong>hostname</strong> is not properly propogated when the hostname is created or
+   changed you will get an error that looks something like this:</p>
+
+    <pre><code> *** running local command: echo '
+ Host &lt;hostname&gt;
+   User ubuntu
+   IdentityFile ~/.ec2/lab-dev.pem
+ ' &gt;&gt; ~/.ssh/config
+
+ *** running local command: ssh-keygen -R &lt;hostname&gt;
+ /Users/stephen/.ssh/known_hosts updated.
+ Original contents retained as /Users/stephen/.ssh/known_hosts.old
+
+ *** running local command: ssh ubuntu@&lt;hostname&gt; -o StrictHostKeyChecking=no exit
+ ssh: Could not resolve hostname &lt;hostname&gt;: nodename nor servname provided, or not known
+
+ *** updating littlechef node: &lt;hostname&gt;.json
+
+ *** provisioning &lt;hostname&gt; with littlechef role: lab-server
+     &lt;ec2-id&gt;, &lt;ec2-hostname&gt;, &lt;new-ip-address&gt;
+     command: cd /Users/stephen/dev/concord/lab/config/littlechef &amp;&amp; fix node:&lt;hostname&gt; role:lab-server
+
+
+ == Applying role 'lab-server' to &lt;hostname&gt; ==
+
+ Fatal error: Name lookup failed for &lt;hostname&gt;
+
+ Underlying exception:
+     nodename nor servname provided, or not known
+</code></pre>
+
+    <p>You will need to resolve the issue with getting the correct DNS record for <strong>hostname</strong> before
+   continuing. After this is resolved you can follow these steps to continue the initial setup and
+   provisioning:</p>
+
+    <pre><code> $ ssh-keygen -R &lt;hostname&gt;
+ $ ssh ubuntu@&lt;hostname&gt; -o StrictHostKeyChecking=no exit
+ $ thor cloud:update  &lt;hostname&gt;
+</code></pre>
+  </li>
+  <li>
+    <p>Optionally configure the server to use a valid Java code-siging certificate.</p>
+
+    <p>If you wish to support the integration of the optional Java resources that are required to be signed to work:</p>
+
+    <ul>
+      <li>legacy Molecular Worbench and Energy2D Java Web Start applications</li>
+      <li>Java-based Vernier GoIO browser-sensor applet integration</li>
+    </ul>
+
+    <p>You should put copy of a valid Java siging certificate keystore on <strong>hostname</strong> and edit
+   <code>config/config.yml</code> to reference this keystore before running <code>cap &lt;deploy-target&gt; deploy:setup</code></p>
+
+    <p>The one supplied with the repository is a sample self-signed certificate and end user will be warned that it
+   is not valid.</p>
+
+    <p>Here is one way to acomplish this:</p>
+
+    <pre><code> $ scp &lt;path-to-keystore&gt; deploy@&lt;hostname&gt;:/var/www/app/config/&lt;new-keystore-name&gt;.jks
+</code></pre>
+
+    <p>Now ssh to the new host and edit the <a href="https://github.com/concord-consortium/lab/blob/master/config/config.sample.yml#L2-6">java section</a>
+   of <code>/var/www/app/config/config.yml</code> to update the values for <code>:password</code>, <code>:alias</code>, and <code>:keystore_path</code>.</p>
+  </li>
+  <li>
+    <p>Finishing the setup of the server with a capistrano task</p>
+
+    <pre><code> $ cap &lt;deploy-target&gt; deploy:setup
+</code></pre>
+
+    <p>This completes the initial deploy and builds of all the project resources to the server.</p>
+  </li>
+</ol>
+
+<h2 id="references">References</h2>
+
+<h3 id="molecular-simulation">Molecular Simulation</h3>
+
+<ul>
+  <li><a href="http://li.mit.edu/Archive/Papers/05/Li05-2.8.pdf">Basic molecular dynamics</a></li>
+  <li>
+    <p><a href="http://www.ch.embnet.org/MD_tutorial/">CHARMM: A theoretical introduction to molecular dynamics simulations and practical examples</a></p>
+
+    <p>This site has a basic introduction to the physics of molecular dynamics simulations, and practical
+exercises with the CHARMM package</p>
+  </li>
+  <li><a href="http://phjoan23.technion.ac.il/~phr76ja/thermostats.pdf">Thermostat Algorithms for Molecular Dynamics Simulations</a></li>
+  <li>
+    <p><a href="http://en.wikipedia.org/wiki/Flying_ice_cube">the “flying ice cube”</a></p>
+
+    <p>One kind of unphysical effect that can arise. See linked paper.</p>
+  </li>
+  <li><a href="http://www.sklogwiki.org/SklogWiki/index.php/Lennard-Jones_model">SklogWiki: Lennard-Jones</a></li>
+</ul>
+
+<h4 id="courses">Courses</h4>
+
+<ul>
+  <li>
+    <p><a href="http://www.pages.drexel.edu/~cfa22/msim/msim.html">CHE 800-002: Molecular Simulation</a>
+  Cameron Abrams Department of Chemical Engineering at Drexel</p>
+  </li>
+  <li><a href="http://courses.theophys.kth.se/SI2530/">Computational Physics</a></li>
+  <li><a href="http://www.cstl.nist.gov/srs/LJ_PURE/index.htm">Benchmark results for Lennard-Jones fluid</a></li>
+  <li><a href="http://homepage.univie.ac.at/franz.vesely/simsp/dx/dx.html">Statistical Physics and Simulation</a></li>
+</ul>
+
+<h4 id="reduced-units">Reduced Units</h4>
+
+<ul>
+  <li><a href="http://matdl.org/matdlwiki/index.php/softmatter:Reduced_units">softmatter:Simulation Variables/Units</a></li>
+  <li><a href="http://www.pages.drexel.edu/~cfa22/msim/node27.html">An MD Code for the Lennard-Jones Fluid</a></li>
+  <li><a href="http://homepage.univie.ac.at/franz.vesely/simsp/dx/node11.html">2.4 Reduced Units</a></li>
+  <li><a href="http://books.google.com/books?id=XmyO2oRUg0cC&amp;pg=PA41&amp;lpg=PA41&amp;dq=Reduced+Units+Lennard-Jones&amp;source=bl&amp;ots=Zx0F10o1yR&amp;sig=2UJ4C-W8LuASjrvkoTxPA63XBos&amp;hl=en&amp;sa=X&amp;ei=R0AWT7fmNOn10gHKx4jxAg&amp;ved=0CGIQ6AEwBw#v=onepage&amp;q=Reduced%20Units%20Lennard-Jones&amp;f=false">Understanding molecular simulation: from algorithms to applications</a></li>
+  <li><a href="http://users.aims.ac.za/~nneoma/theses/NneomaAimsEssay.pdf">Molecular Dynamics Simulation: Nneoma Ogbonna</a></li>
+</ul>
+
+<h3 id="javascript-library-runtime-dependencies">JavaScript Library Runtime Dependencies</h3>
+
+<h4 id="d3">D3</h4>
+
+<p><a href="http://mbostock.github.com/d3/">D3</a>: manipulating and visualizing documents based on data.</p>
+
+<ul>
+  <li><a href="https://github.com/mbostock/d3">repo</a></li>
+  <li><a href="http://mbostock.github.com/d3/api/">documentation</a></li>
+  <li><a href="https://github.com/mbostock/d3/issues">issues</a></li>
+  <li><a href="http://groups.google.com/group/d3-js">google group</a></li>
+  <li><a href="https://github.com/mbostock/d3/wiki/API-Reference">API reference</a>
+    <ul>
+      <li><a href="https://github.com/mbostock/d3/wiki/Arrays">Arrays</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="jquery">JQuery</h4>
+
+<p><a href="http://jquery.com/">JQuery</a>: simplifies HTML document traversing, event handling, animating,
+and Ajax interactions.</p>
+
+<h4 id="jquery-ui">JQuery-UI</h4>
+
+<p><a href="http://jqueryui.com/">JQuery-UI</a>: abstractions for low-level interaction and
+animation, advanced effects and high-level, themeable widgets, built on top of the jQuery</p>
+
+<h4 id="sizzle">Sizzle</h4>
+
+<p><a href="http://sizzlejs.com/">sizzle</a>: CSS selector engine designed to be easily dropped in to a
+host library.</p>
+
+<h4 id="codemirror">Codemirror</h4>
+
+<p><a href="https://github.com/marijnh/CodeMirror2">Codemirror2</a>: in-browser code editor.</p>
+
+<h4 id="sciencejs">science.js</h4>
+
+<p><a href="https://github.com/jasondavies/science.js">science.js</a>: scientific and statistical
+computing methods.</p>
+
+<h4 id="dspjs">dsp.js</h4>
+
+<p><a href="https://github.com/corbanbrook/dsp.js">dsp.js</a>: digital signal processing methods
+including functions for signal analysis and generation, Oscillators(sine, saw, square, triangle),
+Window functions (Hann, Hamming, etc), Envelopes(ADSR), IIR Filters(lowpass, highpass,
+bandpass, notch), FFT and DFT transforms, Delays, Reverb.</p>
+
+<h4 id="modernizr">Modernizr</h4>
+
+<p><a href="https://github.com/Modernizr/Modernizr">modernizr</a>: detect HTML5 and CSS3 features in browsers.</p>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/src/index.html.haml#L12"><code>index.html.haml</code></a>
+uses Modernizer to check if the browser implents SVG and re-direct the user to an upgrade
+page if the feature is not presnet.</p>
+
+<h4 id="mathjax">MathJax</h4>
+
+<p><a href="http://mathjax.com/">MathJax</a> is a display engine for mathematics that works in all modern browsers.</p>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/src/doc/models/md2d/lennard-jones-potential/lennard-jones-potential.html.haml#L23-30"><code>lennard-jones-potential.html.haml</code></a>
+uses MathJax to display LaTeX formatted math equations.</p>
+
+<h4 id="opensans-font">OpenSans Font</h4>
+
+<p><a href="http://www.google.com/webfonts/specimen/Open+Sans">OpenSans Font</a>: used for most text display</p>
+
+<h3 id="development-dependencies">Development Dependencies</h3>
+
+<h4 id="node">node</h4>
+
+<ul>
+  <li><a href="http://nodejs.org/">node</a></li>
+  <li><a href="https://github.com/joyent/node">repo</a></li>
+  <li><a href="http://nodejs.org/docs/latest/api/index.html">documentation</a></li>
+  <li><a href="http://nodejs.org/docs/latest/api/debugger.html">debugger</a></li>
+  <li><a href="https://github.com/joyent/node/issues">issues</a></li>
+  <li><a href="http://groups.google.com/group/nodejs">google group</a></li>
+  <li><a href="http://howtonode.org/">How To Node</a></li>
+</ul>
+
+<p><strong><a href="https://github.com/dannycoates/node-inspector">node-inspector</a></strong>
+- <a href="http://search.npmjs.org/#/node-inspector">npm package for node-inspector</a></p>
+
+<h4 id="npm">npm</h4>
+
+<p><a href="http://npmjs.org/">npm</a>, the Node Package Manager isnow bundled with Node and is
+used to specify and manage external node pacage dependencies for a project.</p>
+
+<ul>
+  <li><a href="https://github.com/isaacs/npm">repo</a></li>
+  <li><a href="http://npmjs.org/doc/faq.html">faq</a></li>
+  <li><a href="https://groups.google.com/group/npm-">google group</a></li>
+  <li><a href="https://github.com/isaacs/npm/issues">issues</a></li>
+</ul>
+
+<p>More about using npm for development:</p>
+
+<ul>
+  <li><a href="http://howtonode.org/introduction-to-npm">Introduction to npm</a></li>
+  <li><a href="http://www.mikealrogers.com/posts/nodemodules-in-git.html">node_modules in git</a></li>
+  <li><a href="http://howtonode.org/managing-module-dependencies">Managing module dependencies</a></li>
+  <li><a href="https://groups.google.com/group/nodejs/browse_thread/thread/9aa563f1fe3b3ff5">What do people do for versioning node modules within git?</a></li>
+</ul>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/package.json"><code>package.json</code></a>
+specifies node pakage dependencies for the Lab project.</p>
+
+<h4 id="requirejs">RequireJS</h4>
+
+<p><a href="http://requirejs.org">RequireJS</a> is a JavaScript file and module
+loader. It is optimized for in-browser use, but it can be used in other
+JavaScript environments, like Rhino and Node.</p>
+
+<ul>
+  <li><a href="http://requirejs.org">homepage</a></li>
+  <li><a href="https://github.com/jrburke/requirejs">repo</a></li>
+  <li><a href="https://groups.google.com/forum/?fromgroups#!forum/requirejs">RequireJS Google Group</a></li>
+</ul>
+
+<p>Lab Example:</p>
+
+<p>All Lab’s modules use RequireJS for dependency management and build process. Its application is widely
+described in <a href="#javascript-dependency-management-and-build-process---requrejs">this section</a>.</p>
+
+<h4 id="coffeescript">CoffeeScript</h4>
+
+<p><a href="http://coffeescript.org/">CoffeeScript</a> is a language the compiles to JavaScript. Many programmers
+find it more expressive and productive. <a href="http://js2coffee.org/">js2cofee</a> can be used to convert
+JavaScript to CoffeeScript. RequireJS Optimizer also can convert CoffeeScript to JavaScrit. So
+you don’t have to manually do it when referencing CoffeeScript files using RequireJS.</p>
+
+<ul>
+  <li><a href="https://github.com/jashkenas/coffee-script">repo</a></li>
+  <li><a href="https://github.com/jashkenas/coffee-script/issues">issues</a></li>
+</ul>
+
+<p>Lab Examples:</p>
+
+<ol>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/node-bin/get-md2d-data.coffee"><code>get-md2d-data.coffee</code></a>
+is a coffeescript program used to run the MD2D engine from the command line and generate data used
+for physics validation tests.</li>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/src/lab/common/components/playback_svg.coffee"><code>PlaybackComponentSVG</code></a>
+is an object written in CoffeeScript that creates and manages the SVG-based Playback control widget
+for the Molecule Container.</li>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/src/lab/md2d/controllers/interactives-controller.js"><code>InteractivesController</code></a>
+is an object written in plain JavaScript which references directly CoffeeScript file using RequireJS
+(<code>Thermometer = require('cs!common/components/thermometer')</code>).</li>
+</ol>
+
+<p><a href="#coffeescript-files-support">This section</a> covers RequireJS support of CoffeeScript files.</p>
+
+<h3 id="rubygems">RubyGems</h3>
+
+<h4 id="bundler">Bundler</h4>
+
+<p><a href="http://gembundler.com/">Bundler</a> is a Ruby Gem used to express and manage Ruby Gem dependencies.</p>
+
+<ul>
+  <li><a href="http://gembundler.com/rationale.html">rationale</a></li>
+  <li><a href="http://gembundler.com/man/gemfile.5.html">documentation: Gemfile</a></li>
+  <li><a href="http://gembundler.com/man/bundle.1.html">documentation: CLI</a></li>
+</ul>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/Gemfile"><code>Gemfile</code></a>
+is used to specify all the Ruby Gem dependencies to build and test the Lab project.</p>
+
+<h4 id="haml">Haml</h4>
+
+<p><a href="http://haml-lang.com/">Haml</a> is a Ruby Gem that processes HTML expressed in HAML markup into HTML.</p>
+
+<ul>
+  <li><a href="http://haml-lang.com/docs.html">documentation</a></li>
+  <li><a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html">reference</a></li>
+</ul>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/src/index.html.haml"><code>index.html.haml</code></a>
+is used to generate the main <a href="https://github.com/concord-consortium/lab/blob/gh-pages/index.html"><code>index.html</code></a> page.</p>
+
+<h4 id="sass">Sass</h4>
+
+<p><a href="http://sass-lang.com/">Sass</a> is a Ruby Gem that provides many powerful extensions to CSS3 and works
+by processing files in either <a href="http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html">SASS-indented-syntax</a>
+or SCSS format (a su[erset of standard CSS3) and generating CSS stylesheets.</p>
+
+<ul>
+  <li><a href="http://sass-lang.com/docs.html">documentation</a></li>
+  <li><a href="http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html">reference</a></li>
+</ul>
+
+<p>Lab Examples:</p>
+
+<ol>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/src/index.sass"><code>index.sass</code></a>
+is used to generate: <a href="https://github.com/concord-consortium/lab/blob/gh-pages/index.css"><code>index.css</code></a></li>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/src/readme.scss"><code>readme.scss</code></a>
+is used to generate: <a href="https://github.com/concord-consortium/lab/blob/gh-pages/readme.css"><code>readme.css</code></a></li>
+</ol>
+
+<h4 id="guard">Guard</h4>
+
+<p><a href="https://github.com/guard/guard">Guard</a> is a Ruby Gem that can efficiently watch for changes on the file system and
+automatically start the build process when needed.</p>
+
+<ul>
+  <li><a href="https://github.com/hawx/guard-shell">guard-shell</a></li>
+  <li><a href="https://github.com/manufaktor/guard-haml">guard-haml</a></li>
+  <li><a href="https://github.com/hawx/guard-sass">guard-sass</a></li>
+  <li><a href="https://github.com/guard/guard-coffeescript">guard-coffeescript</a></li>
+  <li><a href="https://github.com/darwalenator/guard-markdown">guard-markdown</a></li>
+  <li><a href="https://github.com/guard/guard-livereload">guard-livereload</a></li>
+</ul>
+
+<p>Lab Example: Starting Guard with <code>bin/guard</code> loads and runs the configuration in <a href="https://github.com/concord-consortium/lab/blob/master/Guardfile"><code>Guardfile</code></a>.</p>
+
+<h4 id="thor">Thor</h4>
+
+<p><a href="https://github.com/wycats/thor">thor</a> is a Ruby Gem for building self-documenting command line utilities.</p>
+
+<ul>
+  <li><a href="https://github.com/wycats/thor/wiki">documentation</a></li>
+</ul>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/cloud.thor"><code>cloud.thor</code></a> are the
+Ruby command-line interface scripts for providing access to the
+<a href="https://github.com/concord-consortium/lab/blob/master/script/aws-lab-server.rb"><code>AwsLabServer</code></a>
+library for creating and managing AWS cloud servers.</p>
+
+<h4 id="fog">Fog</h4>
+
+<p><a href="http://fog.io/">fog</a> is a Ruby Gem for working with many different cloud service providers.</p>
+
+<ul>
+  <li><a href="http://fog.io/">documentation</a></li>
+  <li><a href="https://github.com/fog/fog">repo</a></li>
+</ul>
+
+<p>Lab Example: <a href="https://github.com/concord-consortium/lab/blob/master/script/aws-lab-server.rb"><code>AwsLabServer</code></a>
+is a library built on top of fog for creating and managing Lab server instances on AWS.</p>
+
+<h3 id="additional-testing-dependencies">Additional Testing Dependencies</h3>
+
+<h4 id="vows">Vows</h4>
+
+<p><a href="http://vowsjs.org">Vows</a> is an asynchronous behaviour driven testing framework for Node.</p>
+
+<ul>
+  <li><a href="https://github.com/cloudhead/vows">repo</a></li>
+</ul>
+
+<p>Lab Examples:</p>
+
+<ol>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/test/lab/grapher/core/axis-test.js"><code>axis-test.js</code></a>
+is used to test the drag UI logic for interactively re-scaling Graph axes.</li>
+  <li><a href="https://github.com/concord-consortium/lab/blob/master/test/lab/arrays/arrays-test.js"><code>arrays-test.js</code></a>
+is used to test the utility class for working with regular or Typed Arrays.</li>
+</ol>
+
+<h4 id="jsdom">jsdom</h4>
+
+<ul>
+  <li><a href="http://jsdom.org">jsdom</a></li>
+  <li><a href="https://github.com/tmpvar/jsdom">repo</a></li>
+  <li><a href="https://github.com/tmpvar/jsdom/issues">issues</a></li>
+</ul>
+
+<h3 id="miscellaneous">Miscellaneous</h3>
+
+<h4 id="livereload">livereload</h4>
+
+<p><a href="https://github.com/mockko/livereload">livereload</a> is project that has created extensions
+for Chrome FireFox, and Safari to provide automatic browser reloading when the HTML,
+CSS and JavaScript files are changed on the server. The older version 1 extensions
+work with the guard-livereload gem.</p>
+
+<ul>
+  <li><a href="https://github.com/mockko/livereload/blob/master/README-old.md">livereload v1 readme</a></li>
+</ul>
+
+<h3 id="full-screen-api">Full Screen API</h3>
+
+<ul>
+  <li><a href="http://peter.sh/2011/01/javascript-full-screen-api-navigation-timing-and-repeating-css-gradients/">JavaScript Full Screen API, Navigation Timing and repeating CSS Gradients</a></li>
+  <li><a href="http://peter.sh/2011/08/fullscreen-api-enhanced-element-highlighting-and-progress-on-flexbox/">Fullscreen API, enhanced Element Highlighting and progress on Flexbox</a></li>
+  <li><a href="http://johndyer.name/native-fullscreen-javascript-api-plus-jquery-plugin/">Native Fullscreen JavaScript API (plus jQuery plugin)</a></li>
+  <li><a href="https://wiki.mozilla.org/Gecko:FullScreenAPI">Gecko:FullScreenAPI</a></li>
+  <li><a href="http://blog.pearce.org.nz/2011/09/mozilla-full-screen-api-progress-update.html">Mozilla full-screen API progress update</a></li>
+  <li><a href="http://ajaxian.com/archives/fullscreen-api-coming-to-browsers-near-you">fullscreen API coming to browsers near you?</a></li>
+  <li><a href="http://html5-demos.appspot.com/static/fullscreen.html">Full Screen Demos</a></li>
+  <li><a href="http://stackoverflow.com/questions/7836204/chrome-fullscreen-api">stackoverflow: Chrome Fullscreen API</a></li>
+</ul>
+
+    </div>
+    <script src="vendor/hijs/hijs.js"></script>
+  </body>
+</html>
