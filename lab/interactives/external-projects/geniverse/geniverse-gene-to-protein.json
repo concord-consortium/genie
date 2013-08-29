@@ -47,7 +47,7 @@
     {
       "type": "button",
       "id": "transcribe",
-      "text": "Transcribe",
+      "text": "Transcribe all",
       "action": [
         "set('geneticEngineState', 'dna');",
         "animateToDNAState('transcription-end');"
@@ -62,7 +62,7 @@
     {
       "type": "button",
       "id": "translate",
-      "text": "Translate",
+      "text": "Translate all",
       "action": [
         "set('geneticEngineState', 'transcription-end');",
         "animateToDNAState('translation-end');"
@@ -104,6 +104,12 @@
         " setRestraintProperties(1, {k:0});   ",
         "}                                    "
       ]
+    },
+    {
+      "type": "button",
+      "id": "reset",
+      "text": "Reset",
+      "action": "set('snapState', 'dna');"
     }
   ],
   "template": [
@@ -133,6 +139,9 @@
       ],
       [
         "refold"
+      ],
+      [
+        "reset"
       ]
     ]
   }
