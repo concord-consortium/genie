@@ -191,8 +191,8 @@ function changeGene($gene) {
 	iframePhone.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
 	iframePhone2.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
 
-	// hide video links if visible
-	$('#video-links').fadeOut();
+	// hide more button if visible
+	$('#more').hide();
 
 	// update more button
 	$('#more').removeAttr("disabled");
@@ -403,7 +403,7 @@ function sendNextDNAStrand($applet_id, $dna_strand) {
 	// disable more button during animation
 	$('#more').attr('disabled', 'disabled');
 	if (!$stop_codon) {
-		if ($dna_strand.length >= 105) {
+		if ($dna_strand.length >= 60) {
 			$enable_more = setTimeout('enableMore()', 1000);
 		}
 	} else {
@@ -432,12 +432,12 @@ function enableMore() {
 
 /*
  * Show Applet
- * Reveals the applet and video links
+ * Reveals the applet and more button
  *
  */
 function showApplet() {
 	$('#details iframe').css('left', '0px');
-	$('#video-links').fadeIn();
+	$('#more').show();
 	iframePhone.post({ type:'set',  propertyName: 'state', propertyValue: 'dna'});
 	iframePhone2.post({ type:'set',  propertyName: 'state', propertyValue: 'dna'});
 }

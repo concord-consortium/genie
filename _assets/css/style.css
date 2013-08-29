@@ -581,15 +581,13 @@ body.wider #dna .junk { width: 175px !important; }
 		text-align: right;
 		width: 100%;
 		}
-	#details #video-links {
-		background: #f4f5ef;
-		border-top: dotted 2px #aaa;
+	#details #more {
+		position: absolute;
+		left: 7px;
+		top: 306px;
+		z-index: 1000;
 		display: none;
-		font-weight: bold;
-		margin-top: 0;
-		padding: 10px 5px 5px;
-		text-align: center;
-		}
+	}
 		#details #video-links a {
 			color: #492222;
 			}
