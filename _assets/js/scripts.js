@@ -692,6 +692,7 @@ function updateDNASection($gene, $inspect) {
  * Compares two given alleles and marks location of the difference(s)
  */
 function compareAlleleSeqs($gene, $allele1, $allele2) {
+	if (!$seqs[$allele2]) return [ $seqs[$allele1] ];
 	$return_seqs_array = [];
 
 	// initialize array for keeping track of differences
