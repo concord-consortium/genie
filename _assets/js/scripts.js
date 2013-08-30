@@ -187,8 +187,10 @@ function changeGene($gene) {
 
 	// hide applet if visible
 	$('#details iframe').css('left', '-999em');
-	iframePhone.post({ type:'set',  propertyName: 'snapState', propertyValue: 'intro-cells'});
-	iframePhone2.post({ type:'set',  propertyName: 'snapState', propertyValue: 'intro-cells'});
+
+	var initialState = (~window.location.pathname.indexOf("index")) ? 'intro-cells' : 'dna';
+	iframePhone.post({ type:'set',  propertyName: 'snapState', propertyValue: initialState});
+	iframePhone2.post({ type:'set',  propertyName: 'snapState', propertyValue: initialState});
 	iframePhone.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
 	iframePhone2.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
 
