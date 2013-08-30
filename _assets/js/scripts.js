@@ -17,6 +17,7 @@ $(document).ready(function () {
 	iframePhone2 = setupIframeListenerFor($iframe[1]);
 
 	function setupIframeListenerFor(iframe, callback) {
+	    if (!iframe) return;
 	    var iframeOrigin = iframe.src.match(/(.*?\/\/.*?)\//)[1],
 	        selfOrigin = window.location.href.match(/(.*?\/\/.*?)\//)[1],
 	        iframePhone = {},
