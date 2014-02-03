@@ -3,7 +3,56 @@
 <head>
 <meta charset="utf-8" />
 <title>Genome Browser</title>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Sofadi+One" />
 <link rel="stylesheet" href="_assets/css/style.css" />
+<link rel="stylesheet" href="_assets/css/fireworks.css" />
+<style>
+.button {
+  background: #f3951d;
+  border: solid 1px #efb467;
+  color: #fff;
+  cursor: pointer;
+  font: 12px/1 arial, helvetica, sans-serif;
+  padding: 6px 14px;
+  text-align: center;
+  /* CSS 3 */
+  background: -webkit-gradient(linear, left top, left bottom, from(#f3951d), to(#ec6e0d));
+  background: -moz-linear-gradient(top,  #f3951d,  #ec6e0d);
+  -moz-border-radius: 6px; /* FF1+ */
+  -webkit-border-radius: 6px; /* Saf3+, Chrome */
+  border-radius: 6px; /* Opera 10.5, IE 9 */
+  -moz-box-shadow: inset 0px 1px 0px 0px #cf9447;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #cf9447;
+  box-shadow: inset 0px 1px 0px 0px #cf9447;
+  text-shadow: 1px 1px 0px #ec6e0d;
+  }
+.button:hover {
+    background: #f3951d;
+    /* CSS 3 */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f3951d), to(#dd6e0d));
+    background: -moz-linear-gradient(top,  #f3951d,  #dd6e0d);
+    }
+.button:active { margin-top: 3px; }
+.button.disabled {
+  background: #999;
+  border: solid 1px #aaa;
+  padding: 6px 14px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#bbb), to(#999));
+  background: -moz-linear-gradient(top,  #bbb,  #999);
+  -moz-box-shadow:inset 0px 1px 0px 0px #ccc;
+  -webkit-box-shadow:inset 0px 1px 0px 0px #ccc;
+  box-shadow: inset 0px 1px 0px 0px #ccc;
+  text-shadow: none;
+  }
+.button.disabled:active {
+  margin-top: 0;
+  }
+#labels .button { width: 100%; }
+#details #app-container, #details #app-container2 {
+	height: 320px;
+	}
+#otc-question { display: none; padding: 10px; }
+</style>
 </head>
 <body>
 <div id="page">
@@ -109,13 +158,27 @@
       <iframe width="628px" height="356px" frameborder="no" scrolling="no" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" src="lab/embeddable.html#interactives/external-projects/geniverse/geniverse-gene-to-protein.json"></iframe>
       </div>
     </div>
+    <div id="sequence-button">
+      <p>Think this is the one? <button class="button">Sequence It</button></p>
+    </div>
     <div id="drakes">
-      <p id="drake"><img src="_assets/img/guild-badge.png" /><br />
+	    <p id="drake"><img src="_assets/img/guild-badge.png" /><br />
         <em>A drake homozygous for the selected allele</em></p>
-      <p id="drake2" style="display: none;"><img src="_assets/img/drakes/non-metallic.png" /><br />
+    	<p id="drake2" style="display: none;"><img src="_assets/img/drakes/dilute.png" /><br />
         <em>A drake homozygous for the selected allele</em></p>
     </div><!-- end #drakes -->
     <div id="gene-description"></div>
+    <div id="special-instructions"></div>
+    <div id="otc-question">
+      <p>What is the difference between the normal OTC protein and the bog-breath OTC protein?</p>
+      <form method="post" action="#" onsubmit="checkOTCAnswer(this); return false;">
+      <label for="otcq1"><input type="radio" name="otcq" id="otcq1" value="1" /> Val is changed to Phe</label><br />
+      <label for="otcq2"><input type="radio" name="otcq" id="otcq2" value="2" /> Phe is changed to Asn</label><br />
+      <label for="otcq3"><input type="radio" name="otcq" id="otcq3" value="3" /> Asn is changed to Leu</label><br />
+      <label for="otcq4"><input type="radio" name="otcq" id="otcq4" value="4" /> Leu is changed to Val</label><br />
+      <input class="button" type="submit" name="otcq-submit" value="Check Answer" /> 
+      </form>
+    </div>
   </div><!-- end #details -->
   <p style="background: #79849a; color: #fee9aa; bottom: -20px; clear: both; font-size: 10px; height: 20px; left: -10px; margin: 10px; padding: 5px; position: absolute; width: 100%; z-index: 200;">Supported with funding from the National Science Foundation.</p>
   <div id="lines"></div>
@@ -125,8 +188,30 @@
 <div id="access-denied">
   <h2>Gene to Protein Genie Access Denied.</h2>
 </div>
+<div id="congratulations">
+  <h2>Congratulations!</h2>
+  <p>You've worked with drakes that have bog breath, learning how it is inherited and which the chromosome the faulty gene is on.</p>
+  <p>Which gene on that chromosome is causing bog breath?</p>
+  <p>No one knows... yet. But you are hot on the trail.</p>
+  <p>PINPOINT THE ALLELE THAT CAUSES THIS DISEASE AND HELP ARROW!</p>
+  <p>Use the Gene to Protein Genie to find the bog breath allele!</p>
+  <p><button onclick="closeCongratulations(); return false;" title="Get Started" class="button">Get Started</button></p>
+</div>
+<div id="correct">
+  <h2>Correct!</h2>
+  <button class="button" onclick="window.location.href='correct.html'">OK</button>
+</div>
+<div id="letters"></div>
+<div id="fireworks-template">
+  <div id="fw" class="firework"></div>
+  <div id="fp" class="fireworkParticle"><img src="_assets/img/particles.gif" alt="" /></div>
+</div>
+<div id="fireContainer"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 <script src="_assets/js/scripts.js"></script>
+<script src="_assets/js/bogbreath.js"></script>
+<script src="_assets/js/soundmanager2-nodebug-jsmin.js"></script>
+<script src="_assets/js/fireworks.js"></script>
 </body>
 </html>

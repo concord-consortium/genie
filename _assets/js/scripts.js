@@ -188,7 +188,8 @@ function changeGene($gene) {
 	// hide applet if visible
 	$('#details iframe').css('left', '-999em');
 
-	var initialState = (~window.location.pathname.indexOf("index")) ? 'intro-cells' : 'dna';
+	//var initialState = (~window.location.pathname.indexOf("index")) ? 'intro-cells' : 'dna';
+	var initialState = 'dna';
 	iframePhone.post({ type:'set',  propertyName: 'snapState', propertyValue: initialState});
 	iframePhone2.post({ type:'set',  propertyName: 'snapState', propertyValue: initialState});
 	iframePhone.post({ type:'set',  propertyName: 'DNAMutations', propertyValue: false});
@@ -285,7 +286,10 @@ function changeGene($gene) {
 			$('#app-container').css({'background-image': 'url(_assets/img/click-state.png)'});
 			$('#app-container2').css({'background-image': 'url(_assets/img/click-state2.png)'}).fadeOut();
 			$('#gene-description').fadeIn().animate({scrollTop: 0}, 'fast');
-			$('#gene-description').css('overflow-y', 'hidden').css('overflow-y', 'auto').html($allele_desc); // css changes prevent unecessary scrollbar from appearing
+			$('#gene-description').css('overflow-y', 'hidden').css('overflow-y', 'auto').html($allele_desc); // css changes prevent unnecessary scrollbar from appearing
+			if ($otc_type == 2) {
+				$('#gene-description').append('<p>The <em><strong>OTC</strong></em> allele makes a fully functioning liver enzyme that removes ammonia from the bloodstream efficiently.</p><p>The <em><strong>bog breath</strong></em> allele makes a defective liver enzyme that cannot remove ammonia from the blood. This causes a dangerous accumulation of ammonia in the body with life-threatening disease symptoms.</p>');
+			}
 			updateDNASection($gene);
 		} else {
 			$('#app-container').css({'background-image': 'url(_assets/img/unauthorized.png)'});
@@ -675,6 +679,10 @@ function updateDNASection($gene, $inspect) {
 			$dna_string2 = $dna_string2.substring(0, 60);
 			$('#app-container').unbind('click');
 			$('#app-container').click(function(){
+				// add return to game link if they've solved bog breath
+				if ($gene === 'otc' && $otc_type == 2) {
+					setTimeout('addGameLink()', 10000);
+				}
 				sendDNAStrand('applet', $dna_string, $highlight, '#' + $gene + '-dna');
 				sendDNAStrand('applet2', $dna_string2, $highlight, '#' + $gene + '-dna');
 				$('#app-container .header').html($selected_option_value_array[0]).fadeIn();
@@ -682,6 +690,10 @@ function updateDNASection($gene, $inspect) {
 			});
 			$('#app-container2').unbind('click');
 			$('#app-container2').click(function(){
+				// add return to game link if they've solved bog breath
+				if ($gene === 'otc' && $otc_type == 2) {
+					$('#nav ul').delay(3000).append('<li><a href="http://geniverse.concord.org/lab/#endingHub" onclick="returnToGame(); return false;">Return to Game</a></li>');
+				}
 				sendDNAStrand('applet', $dna_string, $highlight, '#' + $gene + '-dna');
 				sendDNAStrand('applet2', $dna_string2, $highlight, '#' + $gene + '-dna');
 			});
@@ -837,7 +849,9 @@ function checkAccessLevel($user_level) {
 
 	  // update nav links with user level value
 	  $('#nav a').each(function(i) {
-		  this.href = this.href + '?ul=' + $user_level;
+		  if (!this.href.match(/\?ul=/)) {
+		    this.href = this.href + '?ul=' + $user_level;
+	      }
 	  });
 
 	  // determine access levels for current user
@@ -1131,4 +1145,18 @@ function moveDNAToEquivalentLocation(magTop) {
 		$('#magnifier').css('background-position', '0 -37px');
 	}
 
+}
+
+function addGameLink() {
+	$('#nav ul').append('<li style="display: none;"><a style="background: #fee9aa; color: #c00; margin-left: 10px;" href="http://geniverse.concord.org/lab/#endingHub" onclick="returnToGame(); return false;">Return to Game</a></li>');
+	$('#nav ul li:last-child').fadeIn('slow');
+}
+
+function returnToGame() {
+	$('#app-container .applet-wrap').html('');
+	$('#app-container2 .applet-wrap').html('');
+	$('#app-container').css({'background-image': 'url(_assets/img/click-state.png)'});
+	$('#app-container2').css({'background-image': 'url(_assets/img/click-state2.png)'});
+	$('#overlay').fadeIn('fast');
+	$('#finish').fadeIn('slow');
 }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Correct!</title>
+<style type="text/css">
+* { margin: 0; padding: 0; }
+body { background: #25b136; }
+div {
+  position: relative;
+  }
+#wrapper {
+  background: url(_assets/img/flying/sky.jpg);
+  overflow: hidden;
+  height: 600px;
+  min-width: 1024px;
+  top: 0;
+  left: 0;
+  }
+#mountains {
+  background: url(_assets/img/flying/mountains.png);
+  background-position: 0 0;
+  height: 700px;
+  width: 2000px;
+  top: 0;
+  left: 0;
+  }
+
+#grass {
+  background: url(_assets/img/flying/grass.png);
+  background-position: 0px 0px;
+  height: 700px;
+  width: 2000px;
+  top: -30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  }
+
+#dragon {
+  background: url(_assets/img/flying/drakesprite.png);
+  background-size: 100%;
+  width: 549px;
+  height: 439px;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  }
+#text {
+  background: url(_assets/img/flying/congratulations.png) no-repeat;
+  display: block;
+  font-size: 1.7em;
+  height: 208px;
+  left: 600px !important;
+  position: absolute;
+  text-indent: -999em;
+  top: 120px;
+  width: 355px;
+  }
+</style>
+</head>
+  <body>
+    <div id="wrapper">
+      <div id="mountains"></div>
+      <div id="grass"></div>
+      <div id="dragon"></div>
+      <a href="http://geniverse.concord.org/lab/#endingHub" id="text">
+        <h1>Congratulations!</h1>
+        <p>You solved the bog-breath mystery. Great work!</p>
+        <p>Proceed, oh worthy one &raquo;</p>
+      </a>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+      $(function() {
+         setInterval('animateSprite()',100);
+         setInterval('moveSprite()', 1500);
+         setInterval('moveBackground()', 50);
+      });
+
+      var spriteFrame = 1;
+
+      animateSprite = function() {
+        var top = 439 * (spriteFrame % 8);
+        $('#dragon').css('background-position','-0px -'+top+'px');
+
+        spriteFrame++;
+      };
+
+
+      var moveFrame = 0;
+      var movementSequence = [[50,100], [50,80], [50,100], [50, 160], [50, 180], [50,100], [50, 70], [50, 40]];
+
+      moveSprite = function() {
+        var movement = movementSequence[moveFrame % movementSequence.length];
+         $('#dragon').animate({
+           left: movement[0],
+           top: movement[1]
+         }, 1000);
+        moveFrame++;
+      }
+
+      moveBackground = function() {
+        $('#mountains').css({'background-position-x': '-=5px'});
+        $('#grass').css({'background-position-x': '-=20px'});
+      }
+    </script>
+</body>
+</html>

@@ -622,6 +622,30 @@ body.wider #dna .junk { width: 175px !important; }
 		margin-bottom: 1em;
 		}
 
+	#sequence-button {
+		background: #ff0;
+		clear: both;
+		display: none;
+		padding: 10px;
+		}
+
+/* FOOTER & FINISH MESSAGES
+---------------------------------------------------------------------------*/
+#footer {
+	background: #79849a; 
+	color: #fee9aa; 
+	bottom: -20px; 
+	clear: both; 
+	font-size: 10px; 
+	height: 20px; 
+	left: -10px; 
+	margin: 10px; 
+	padding: 5px; 
+	position: absolute; 
+	width: 100%; 
+	z-index: 200;
+	}
+
 /* ACCESS DENIED MESSAGE
 ---------------------------------------------------------------------------*/
 #overlay {
@@ -659,9 +683,9 @@ body.wider #dna .junk { width: 175px !important; }
 #congratulations {
 	background: #e7c79f url(../img/guild-badge.png) no-repeat center 200px;
 	display: none;
-	height: 420px;
+	height: 360px;
 	left: 50%;
-	margin: -210px 0 0 -270px;
+	margin: -190px 0 0 -270px;
 	padding: 20px;
 	position: absolute;
 	top: 50%;
@@ -669,10 +693,23 @@ body.wider #dna .junk { width: 175px !important; }
 	z-index: 510;
 	}
 	#congratulations p { margin-bottom: 1em; }
-	#congratulations h2 {
+	#congratulations h2, #correct h2 {
 		font-size: 1.1em;
 		font-weight: bold;
 		}
+#correct {
+  background: #e7c79f;
+  display: none;
+  height: 60px;
+  left: 50%;
+  margin: -50px 0 0 -105px;
+  padding: 20px;
+  position: absolute;
+  text-align: center !important;
+  top: 50%;
+  width: 170px;
+  z-index: 10000;
+  }
 
 /* SPECIAL INSTRUCTIONS MESSAGE
 ---------------------------------------------------------------------------*/
