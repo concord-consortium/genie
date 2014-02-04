@@ -95,7 +95,7 @@ function inspectGene($gene) {
   } else if ($gene == 'horns') {
     $chromosome_top = (horns.top - 16) + 'px';
     $dna_top = (((horns.top * 1000) - 63) * -1) + 'px';
-    $allele_desc = '<h3>Horns</h3><p>The <em><strong>horns</strong></em> allele codes for a protein that is made in drake embryo in cells. The horns protein normally grows into a boney plate on the skull that forms the foundation for the growth of horns.</p><p>The <em><strong>hornless</strong></em> allele is a dominant mutation that prevents the development of the boney head plate in the drake embryo, and prevents the growth of horns in the adult drake.</p>';
+    $allele_desc = '<h2>Horns</h2><p>The <em><strong>horns</strong></em> allele codes for a protein that is made in drake embryo in cells. The horns protein normally grows into a boney plate on the skull that forms the foundation for the growth of horns.</p><p>The <em><strong>hornless</strong></em> allele is a dominant mutation that prevents the development of the boney head plate in the drake embryo, and prevents the growth of horns in the adult drake.</p>';
   } else if ($gene == 'color') {
     $chromosome_top = (color.top - 16) + 'px';
     $dna_top = (((color.top * 1000) - 60) * -1) + 'px';
@@ -127,7 +127,7 @@ function inspectGene($gene) {
   } else if ($gene == 'deep') {
     $chromosome_top = (deep.top - 16) + 'px';
     $dna_top = (((deep.top * 1000) - 60) * -1) + 'px';
-    $allele_desc = '<h2>Dilute</h2><p>Drake scale color, like human skin color and animal fur color, depends on multiple genes. These color genes control the formation of granules of melanin, the pigment that colors skin in many animals including humans. Melanin pigment granules are found in the scales covering the drake\'s body.</p><p>The <strong><em>deep</em></strong> allele (also sometimes called <strong><em>full</em></strong>) codes for a motor protein that distributes melanin pigment granules. The protein made from the <strong><em>deep</em></strong>  allele distributes melanin granules evenly inside the scales covering the drake\'s body, leading to a deep color.</p><p>The protein made from the <strong><em>dilute</em></strong>  allele does not work as well, and most of the granules stay around the nucleus of the cell instead of being distributed evenly. This leads to a lighter shade of the drake\'s color.</p>';
+    $allele_desc = '<h2>Dilute</h2><p>Drake scale color, like skin or fur color, depends on multiple genes. These color genes control formation of granules of melanin, the pigment that colors skin in many animals including humans. Melanin pigment granules are found in the drake\'s body scales.</p><p>The <strong><em>deep</em></strong> allele codes for a motor protein that distributes melanin pigment granules. The protein made from the <strong><em>deep</em></strong> allele distributes melanin granules evenly inside the drake\'s scales, leading to a deep color.</p><p>The protein made from the <strong><em>dilute</em></strong> allele does not work as well, and most of the granules stay around the cell nucleus instead of being distributed evenly. This leads to a lighter shade of the drake\'s color.</p>';
   } else if ($gene == 'otc') {
     $chromosome_top = (otc.top - 16) + 'px';
     $dna_top = (((otc.top * 1000) - 54) * -1) + 'px';
